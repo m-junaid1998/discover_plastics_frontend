@@ -1,9 +1,9 @@
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { apiSlice } from "../api/apiSlice";
 import { authReducer } from "./authSlice";
 import { guestReducer } from "./guestSlice";
-import { persistStore, persistReducer } from "redux-persist";
 import storageImport from "redux-persist/lib/storage";
 
 const storage = (storageImport as any).default ?? storageImport;
@@ -26,10 +26,11 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     }).concat(apiSlice.middleware),
 });
-
 setupListeners(store.dispatch);
 export const persistor = persistStore(store);
 
