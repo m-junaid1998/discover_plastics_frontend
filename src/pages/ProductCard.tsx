@@ -108,7 +108,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         <img src={currentImg} alt={product.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
         
         {product.discount && product.discount !== "0%" && (
-          <span className="absolute bottom-2.5 right-2.5 z-10 bg-red-600 text-white text-[11px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded-md shadow-xs">
+          <span className="absolute bottom-1.5 right-1 z-10 bg-red-600 text-white text-[11px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded-md shadow-xs">
             -{product.discount}
           </span>
         )}
