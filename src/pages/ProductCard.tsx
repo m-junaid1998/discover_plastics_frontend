@@ -85,7 +85,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <article className="group relative w-full bg-white rounded-xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all duration-500 hover:shadow-xl flex flex-col">
       {/* Top Overlay Controls */}
-      <div className="absolute top-2 inset-x-2.5 z-20 flex justify-between items-center pointer-events-none">
+      <div className="absolute top-1 inset-x-1.5 z-20 flex justify-between items-center pointer-events-none">
         <div>
           {product.isNewArrival && (
             <span className="bg-[var(--color-accent)] text-[var(--color-accent-text)] text-[11px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full shadow-xs">
@@ -146,10 +146,8 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             {product.name}
           </p>
 
-         {/* Colors Section */}
-{colors.length > 0 && (
-
-    <div className="flex flex-wrap items-center mb-2">
+     {colors.length > 0 && (
+      <div className="flex flex-wrap items-center gap-1.5 mb-2">
       {colors.map((clr, i) => {
         const isSelected = selectedColor === clr;
         return (
