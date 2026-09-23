@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, ShoppingBag, ArrowRight, Eye, EyeClosed, Ruler } from "lucide-react";
+import { Heart, ShoppingBag, ArrowRight, Eye, EyeClosed } from "lucide-react";
 import { createSlug } from "../utils/helper";
 import { useWishlist } from "../hooks/useWishList";
 import { useCart } from "../hooks/useCart";
@@ -83,9 +83,9 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   };
 
   return (
-    <article className="group relative w-full bg-white rounded-2xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all duration-500 hover:shadow-xl flex flex-col">
+    <article className="group relative w-full bg-white rounded-xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-all duration-500 hover:shadow-xl flex flex-col">
       {/* Top Overlay Controls */}
-      <div className="absolute top-2.5 inset-x-2.5 z-20 flex justify-between items-center pointer-events-none">
+      <div className="absolute top-2 inset-x-2.5 z-20 flex justify-between items-center pointer-events-none">
         <div>
           {product.isNewArrival && (
             <span className="bg-[var(--color-accent)] text-[var(--color-accent-text)] text-[11px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full shadow-xs">
@@ -146,40 +146,40 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             {product.name}
           </p>
 
-          {/* Color Swatches (Clean Active Border Fix) */}
-          {colors.length > 0 && (
-            <div className="flex items-center gap-2 mb-2.5 overflow-x-auto no-scrollbar py-1">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">COLORS:</span>
-              <div className="flex items-center gap-1.5">
-                {colors.map((clr, i) => {
-                  const isSelected = selectedColor === clr;
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      title={clr}
-                      onClick={(e) => { e.stopPropagation(); setSelectedColor(clr); }}
-                      className={`p-[2px] rounded-full transition-all cursor-pointer border ${
-                        isSelected
-                          ? "border-black scale-110 shadow-xs"
-                          : "border-gray-200 hover:border-gray-400"
-                      }`}
-                    >
-                      <span
-                        className="block w-4 h-4 rounded-full border border-black/10"
-                        style={{ backgroundColor: getColorValue(clr) }}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+         {/* Colors Section */}
+{colors.length > 0 && (
 
-          {/* Dimension with Label & Increased Size */}
+    <div className="flex flex-wrap items-center mb-2">
+      {colors.map((clr, i) => {
+        const isSelected = selectedColor === clr;
+        return (
+          <button
+            key={i}
+            type="button"
+            title={clr}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedColor(clr);
+            }}
+            className={`p-[2px] rounded-full transition-all cursor-pointer border ${
+              isSelected
+                ? "border-black scale-110 shadow-xs"
+                : "border-gray-200 hover:border-gray-400"
+            }`}
+          >
+            <span
+              className="block w-4 h-4 rounded-full border border-black/10"
+              style={{ backgroundColor: getColorValue(clr) }}
+            />
+          </button>
+        );
+      })}
+    </div>
+ 
+)}
+
           {hasDimensions && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold mb-2.5 bg-[#fbf6f0] px-2.5 py-1 rounded-lg w-fit border border-amber-100/60">
-              <Ruler size={13} className="shrink-0 text-amber-700" />
+            <div className="flex items-center text-xs text-gray-700 font-semibold mb-2.5 bg-[#fbf6f0] px-2.5 py-1 rounded-lg w-fit border border-amber-100/60">
               <span>
                 <strong className="text-gray-900 font-bold mr-0.5">Dimension:</strong>
                 {dimensions?.length || 0}L x {dimensions?.width || 0}W x {dimensions?.height || 0}H cm
@@ -187,29 +187,28 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             </div>
           )}
 
-          {/* Pricing & Stock */}
-          <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
-            <div className="flex items-baseline gap-1.5 flex-wrap shrink-0">
-              <span className="text-base md:text-lg font-black text-[var(--color-text-dark)]">
-                Rs. {product.salePrice?.toLocaleString()}
+          {/* Pricing */}
+          <div className="flex items-baseline gap-1.5 flex-wrap mb-2">
+            <span className="text-base md:text-lg font-black text-[var(--color-text-dark)]">
+              Rs. {product.salePrice?.toLocaleString()}
+            </span>
+            {product.regularPrice > product.salePrice && (
+              <span className="text-xs text-[var(--color-muted)] line-through">
+                Rs. {product.regularPrice?.toLocaleString()}
               </span>
-              {product.regularPrice > product.salePrice && (
-                <span className="text-xs text-[var(--color-muted)] line-through">
-                  Rs. {product.regularPrice?.toLocaleString()}
-                </span>
-              )}
-            </div>
+            )}
+          </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${isOutOfStock ? "text-[var(--color-danger)] bg-red-50" : "text-[var(--color-success)] bg-emerald-50"}`}>
-                Stock: {product.stock}
-              </span>
-              {product.images?.length > 1 && (
-                <button type="button" onClick={() => setPreviewImages(!previewImages)} className="cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text-dark)]">
-                  {previewImages ? <Eye size={16} /> : <EyeClosed size={16} />}
-                </button>
-              )}
-            </div>
+          {/* Stock & Preview Toggle (Justify Between on all screen sizes) */}
+          <div className="flex items-center justify-between gap-2 mb-3 w-full">
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${isOutOfStock ? "text-[var(--color-danger)] bg-red-50" : "text-[var(--color-success)] bg-emerald-50"}`}>
+              Stock: {product.stock}
+            </span>
+            {product.images?.length > 1 && (
+              <button type="button" onClick={() => setPreviewImages(!previewImages)} className="cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text-dark)] transition-colors p-1">
+                {previewImages ? <Eye size={16} /> : <EyeClosed size={16} />}
+              </button>
+            )}
           </div>
         </div>
 

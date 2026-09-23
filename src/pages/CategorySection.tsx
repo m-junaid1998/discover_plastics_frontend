@@ -59,7 +59,7 @@ export const CategorySection: React.FC = () => {
           <div className="space-y-4 pt-2">
             <div className="flex justify-between items-center border-b border-[var(--color-border)]/60 pb-2">
               <h3 className="text-sm font-bold uppercase text-[var(--color-primary)]">
-                {selectedCategory.subCategoryName ? `${selectedCategory.categoryName} / ${selectedCategory.subCategoryName}` : selectedCategory.categoryName}
+                 {selectedCategory.subCategoryName}
               </h3>
               <NavLink 
                 to={`/shop?category=${encodeURIComponent(selectedCategory.categoryName)}${selectedCategory.subCategoryName ? `&subCategory=${encodeURIComponent(selectedCategory.subCategoryName)}` : ''}`} 

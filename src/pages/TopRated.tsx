@@ -75,13 +75,10 @@ import ProductCard from "./ProductCard";
               <h2 className="text-lg sm:text-xl font-extrabold tracking-wide uppercase text-[var(--color-text-dark)] leading-tight">
                 Top Rated Products
               </h2>
-              <p className="text-xs text-[var(--color-muted)] mt-0.5">
-                Highest rated items loved by our community
-              </p>
             </div>
           </div>
 
-          <span className="text-xs font-bold px-3.5 py-1.5 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-full text-[var(--color-badge)]">
+          <span className="text-xs  whitespace-nowrap font-bold px-3.5 py-1.5 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-full text-[var(--color-badge)]">
             {topRatedProducts.length} Products
           </span>
         </div>
@@ -100,7 +97,7 @@ import ProductCard from "./ProductCard";
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
             {topRatedProducts.map((product: any) => (
               <ProductCard key={product._id} product={product} />
             ))}
