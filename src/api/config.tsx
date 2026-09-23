@@ -1,4 +1,4 @@
-export const baseUrl =import.meta.env.VITE_BASE_URL;
+export const baseUrl =import.meta.env.VITE_VERCEL_BASE_URL;
 export const endpoints = {
   authRoutes: {
     register: "auth/register",
