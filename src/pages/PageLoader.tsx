@@ -15,13 +15,10 @@ export const PageLoader: React.FC = () => (
           <path d="M12 12c-1.5 2-2 4-2 6M12 12c1.5 2 2 4 2 6" />
         </svg>
       </div>
-
       <h1 className="font-serif text-2xl md:text-4xl font-bold tracking-[0.2em] text-[var(--color-accent)] uppercase mb-4 pl-[0.2em]">
-        Home N More
+       Discover Plastics
       </h1>
-      
       <div className="w-12 h-[1px] bg-[var(--color-accent)]/40 mb-6" />
-
       <div className="flex items-center space-x-2.5">
         {[0, 0.2, 0.4].map((delay, i) => (
           <span
