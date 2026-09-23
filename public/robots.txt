@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Block private, account and state-dependent pages
+Disallow: /wishlist
+Disallow: /checkout
+Disallow: /myprofile
+Disallow: /order-confirmation
+Disallow: /track-order
+
+# Block authentication pages
+Disallow: /login
+Disallow: /signup
+
+# Block admin panel
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://homenmorestudio.com/sitemap.xml

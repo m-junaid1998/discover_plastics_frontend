@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  /* Main Colors (Deep Forest Green Core) */
+  --color-primary: #205239;          /* Deep Forest Green (Primary buttons, hero CTA, banner bg) */
+  --color-primary-hover: #14291F;    /* Darker Green for button hovers */
+  --color-bg-light: #FAF5EC;         /* Warm Cream background */
+  --color-text-dark: #000000;        /* Rich Near-Black for crisp typography */
+
+  /* Elegant Blush & Metallic Accents */
+  --color-accent: #dfb3b6;           /* Blush Pink (Hero shape, discount badge, subscribe bar) */
+  --color-accent-hover: #DCA1A5;      /* Deeper Blush for hover */
+  --color-accent-text: #8C3B43;     /* High contrast pink text for light backgrounds (WCAG Compliant 4.5+:1) */
+  --color-badge: #1F3D2E;            /* Deep Green for badge text on light backgrounds */
+
+  /* Neutral Helper Colors */
+  --color-border: #E4DACB;           /* Warm light beige for subtle borders & dividers */
+  --color-muted: #474747;            /* Muted sage-gray for secondary text/dates/SKU */
+  --color-card-bg: #F4EEE2;          /* Very light beige for cards/inputs background */
+
+  /* UI Feedback & Badge Colors */
+  --color-danger: #ff0000;           /* Deep Crimson Red (Error state) */
+  --color-success: #166534;          /* Emerald Green for success alerts */
+  --color-blue: #1D4ED8;
+
+  /* Reusable Discount Badge Colors */
+  --color-discount-bg: #ffa3aa;      /* Blush Pink for Discount Badge (matches "40% OFF" circle) */
+  --color-discount-text: #ffffff;    /* White text for Discount Badge */
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-text: var(--color-accent-text);
+  --color-bg-light: var(--color-bg-light);
+  --color-text-dark: var(--color-text-dark);
+  --color-border: var(--color-border);
+  --color-muted: var(--color-muted);
+  --color-card-bg: var(--color-card-bg);
+  --color-danger: var(--color-danger);
+  --color-badge: var(--color-badge);
+  --color-success: var(--color-success);
+  --color-discount-bg: var(--color-discount-bg);
+  --color-discount-text: var(--color-discount-text);
+  --color-blue: var(--color-blue);
+  --animate-marquee: marquee 20s linear infinite;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-dark);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+label.required::after {
+  content: " *";
+  color: #ef4444; 
+}
+

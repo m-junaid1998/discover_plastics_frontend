@@ -1,0 +1,43 @@
+# Home N More Studio
+
+> Home N More Studio is a premium home decor, lifestyle, and luxury fragrance store based in Pakistan, offering home accents, candle stands, artisanal products, perfumes, and bakhoor.
+
+## Primary Pages
+
+- [Home](https://homenmorestudio.com/): Main storefront featuring Home N More Studio products, featured collections, and new arrivals.
+- [Shop](https://homenmorestudio.com/shop): Browse the complete collection of home decor, candle holders, lifestyle products, fragrances, and related items.
+- [About Us](https://homenmorestudio.com/aboutus): Learn about Home N More Studio, its design philosophy, artisanal approach, and brand story.
+- [Contact Us](https://homenmorestudio.com/contact): Contact information, store details, and customer support.
+- [Wishlist](https://homenmorestudio.com/wishlist): Customer wishlist and saved products.
+- [Shipping Policy](https://homenmorestudio.com/shipping-policy): Delivery timelines, charges, and shipping guidelines.
+- [Privacy Policy](https://homenmorestudio.com/privacy): Home N More Studio privacy policy.
+
+## Shopping
+
+- [Shop](https://homenmorestudio.com/shop): Main product catalog.
+- Product pages use the URL pattern `https://homenmorestudio.com/product/{slug}`.
+
+## Customer Services
+
+- [Contact](https://homenmorestudio.com/contact): Customer support and store contact information.
+- [Track Order](https://homenmorestudio.com/track-order): Order tracking page.
+- [My Profile](https://homenmorestudio.com/myprofile): Customer account and profile page.
+- [Checkout](https://homenmorestudio.com/checkout): Customer checkout page.
+
+## Brand Information
+
+- Brand Name: Home N More Studio
+- Business Type: Home Decor, Lifestyle & Luxury Fragrance Store
+- Country: Pakistan
+- Primary Products: Home decor, candle stands, candle holders, artisanal products, lifestyle products, luxury fragrances, and bakhoor.
+
+## Store Information
+
+- Address: HOME N’ MORE STUDIO TOWN, SHOP NO G - 213 AQ SUPER MARKET BAHRIA TOWN KARACHI BAHRIA, KARACHI, Karachi, 75300, Pakistan
+- Phone: +92 3238224745
+- Website: https://homenmorestudio.com/
+
+## Policies
+
+- [Shipping Policy](https://homenmorestudio.com/shipping-policy)
+- [Privacy Policy](https://homenmorestudio.com/privacy)
