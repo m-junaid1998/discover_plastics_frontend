@@ -403,7 +403,7 @@ export default function Checkout() {
                     <div className="flex items-center gap-2 border-b border-amber-200/60 pb-1.5">
                       <Building2 size={15} className="text-amber-800" />
                       <span className="text-xs font-extrabold text-amber-900 uppercase tracking-wider">
-                        1. Bank Transfer (Habib Metro Bank)
+                        1. Bank Transfer 
                       </span>
                     </div>
 
