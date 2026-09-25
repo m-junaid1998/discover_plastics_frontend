@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Lock, ShieldCheck, Sparkles, AlertCircle, Building2, Copy, Check, Smartphone, Percent } from "lucide-react";
+import { Lock, ShieldCheck, Sparkles, AlertCircle, Building2, Copy, Check, Smartphone } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
