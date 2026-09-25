@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Lock, Truck, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
+import { Lock, ShieldCheck, Sparkles, AlertCircle, Building2, Copy, Check, Smartphone, Percent } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useState } from "react";
 import { FormInput } from "../components/FormInput";
 import { Button } from "../components/Button";
 import { Breadcrumb } from "../components/Breadcrumb";
@@ -23,12 +24,16 @@ const checkoutSchema = z.object({
   address: z.string().min(5, "Address required"),
   postalCode: z.string().optional(),
   orderNotes: z.string().optional(),
+  paymentMethod: z.enum(["Cash on Delivery", "Online Payment"], {
+    message: "Payment method is required",
+  }),
 });
-
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
   const { createOrder, isOrderMutationLoading } = useOrder();
   const {
     cartItems: liveCartItems,
@@ -42,6 +47,7 @@ export default function Checkout() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -54,8 +60,11 @@ export default function Checkout() {
       area: "",
       address: "",
       orderNotes: "",
+      paymentMethod: "Cash on Delivery", 
     },
   });
+
+  const paymentMethod = watch("paymentMethod");
 
   interface CheckoutItem {
     id: string;
@@ -65,6 +74,7 @@ export default function Checkout() {
     img: string;
     stock: number;
   }
+
   const checkoutItems: CheckoutItem[] = liveCartItems.map((item: any) => {
     const p = item.product || {};
     return {
@@ -84,7 +94,7 @@ export default function Checkout() {
     if (delta > 0 && newQty > target.stock) {
       toast.error(
         "Stock Limit Reached",
-        `Only ${target.stock} units available in stock.`,
+        `Only ${target.stock} units available in stock.`
       );
       return;
     }
@@ -97,15 +107,25 @@ export default function Checkout() {
 
   const subtotal = checkoutItems.reduce(
     (acc, item) => acc + item.price * item.qty,
-    0,
+    0
   );
-  const deliveryCharge =
-    subtotal >= 5000
-      ? 0
-      : watch("city").trim().toLowerCase() === "karachi"
-        ? 300
-        : 600;
-  const totalAmount = subtotal + deliveryCharge;
+  const deliveryCharge = subtotal >= 5000 ? 0 : 300;
+
+  const onlineDiscount = paymentMethod === "Online Payment" ? Math.round(subtotal * 0.05) : 0;
+  const totalAmount = subtotal + deliveryCharge - onlineDiscount;
+
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(label);
+    toast.success("Copied to clipboard", text);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const handleSendPaymentProof = () => {
+    const msg = `Hi, I want to send payment proof for my order.\nAmount: PKR ${totalAmount.toLocaleString()}\nPayment Method: Online Payment (Bank / Easypaisa)`;
+    window.open(`https://wa.me/923138257220?text=${encodeURIComponent(msg)}`, "_blank");
+  };
+
   const onSubmit = async (data: CheckoutFormValues) => {
     if (checkoutItems.length === 0) {
       return toast.error("Cart is empty", "Please add items first.");
@@ -134,8 +154,9 @@ export default function Checkout() {
         })),
         itemsPrice: subtotal,
         shippingPrice: deliveryCharge,
+        discountPrice: onlineDiscount,
         totalPrice: totalAmount,
-        paymentMethod: "Cash on Delivery",
+        paymentMethod: data.paymentMethod,
       };
 
       const res = await createOrder(payload);
@@ -153,7 +174,7 @@ export default function Checkout() {
           "Order Failed",
           error?.response?.data?.message ||
             error?.message ||
-            "Something went wrong!",
+            "Something went wrong!"
         );
       }
     }
@@ -163,7 +184,7 @@ export default function Checkout() {
     if (checkoutItems.length === 0)
       return toast.error(
         "Cart is empty",
-        "Please add items before sending inquiry.",
+        "Please add items before sending inquiry."
       );
     const totalUnits = checkoutItems.reduce((acc, item) => acc + item.qty, 0);
     const itemWord =
@@ -189,6 +210,7 @@ export default function Checkout() {
       "",
       `*Subtotal:* Rs. ${subtotal.toLocaleString()}`,
       `*Shipping:* ${deliveryCharge === 0 ? "FREE" : `Rs. ${deliveryCharge}`}`,
+      ...(onlineDiscount > 0 ? [`*Online Discount (5%):* -Rs. ${onlineDiscount.toLocaleString()}`] : []),
       `*Grand Total:* *Rs. ${totalAmount.toLocaleString()}*`,
       "-------------------------------",
       `Hi, I want to place an order for the ${itemWord} listed above. Please share further details.`,
@@ -196,7 +218,7 @@ export default function Checkout() {
 
     window.open(
       `https://wa.me/923238224745?text=${encodeURIComponent(msg)}`,
-      "_blank",
+      "_blank"
     );
   };
 
@@ -228,8 +250,8 @@ export default function Checkout() {
         className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-4"
       >
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-3">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
               <h2 className="text-lg font-bold font-serif">
                 Customer Information
               </h2>
@@ -253,7 +275,7 @@ export default function Checkout() {
                 className="!bg-[var(--color-card-bg)] !border-[var(--color-border)]"
               />
               <FormInput
-                label="Country "
+                label="Country"
                 {...register("country")}
                 error={errors.country?.message}
                 placeholder="Country Name"
@@ -308,66 +330,189 @@ export default function Checkout() {
             />
           </div>
 
-          <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-3">
-              <h2 className="text-lg font-bold font-serif">Shipping Method</h2>
+          {/* STEP 2: Payment Method */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+              <h2 className="text-lg font-bold font-serif">Payment Method</h2>
               <span className="text-[10px] font-bold text-[var(--color-muted)] tracking-widest uppercase">
                 STEP 2
               </span>
             </div>
-            <div className="flex items-start gap-3 p-4 rounded-xl border border-[var(--color-accent)]/40 bg-[var(--color-card-bg)]">
-              <Truck className="w-5 h-5 text-[var(--color-accent)] shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-xs font-bold">Standard Delivery</h4>
-                <p className="text-[11px] text-[var(--color-muted)]">
-                  Estimated delivery: 3–5 business days across Pakistan
-                </p>
-                <p className="text-[10px] font-bold text-[var(--color-success)] mt-1">
-                  Free shipping on orders over PKR 5,000
-                </p>
-              </div>
-            </div>
-          </div>
 
-          <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex justify-between items-center border-b border-[var(--color-border)] pb-3">
-              <h2 className="text-lg font-bold font-serif">Payment Method</h2>
-              <span className="text-[10px] font-bold text-[var(--color-muted)] tracking-widest uppercase">
-                STEP 3
-              </span>
-            </div>
-            <div className="p-4 rounded-xl border border-[var(--color-accent)] bg-[var(--color-card-bg)] space-y-1.5">
-              <div className="flex items-center gap-2">
-                <h4 className="text-xs font-bold">Cash on Delivery (COD)</h4>
-                <span className="text-[9px] font-bold uppercase bg-[var(--color-accent)]/20 text-[var(--color-accent-hover)] px-2 py-0.5 rounded-md">
-                  Recommended
-                </span>
-              </div>
-              <p className="text-[11px] text-[var(--color-muted)]">
-                Pay in cash when your order arrives at your doorstep.
-              </p>
-              <p className="text-[10px] text-[var(--color-text-dark)] font-medium flex items-center gap-1 pt-1">
-                <ShieldCheck
-                  size={12}
-                  className="text-[var(--color-success)]"
-                />{" "}
-                100% secure — Inspect before payment
-              </p>
+            <div className="space-y-3">
+              {/* Cash On Delivery Option */}
+              <label
+                onClick={() => setValue("paymentMethod", "Cash on Delivery")}
+                className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
+                  paymentMethod === "Cash on Delivery"
+                    ? "border-[var(--color-accent)] bg-emerald-50/20 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <input
+                  type="radio"
+                  value="Cash on Delivery"
+                  {...register("paymentMethod")}
+                  className="mt-1 accent-[var(--color-primary)] cursor-pointer"
+                />
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-bold">Cash on Delivery (COD)</h4>
+                  </div>
+                  <p className="text-[11px] text-[var(--color-muted)]">
+                    Pay in cash when your order arrives at your doorstep.
+                  </p>
+                  <p className="text-[10px] text-[var(--color-text-dark)] font-medium flex items-center gap-1 pt-0.5">
+                    <ShieldCheck size={12} className="text-[var(--color-success)]" />
+                    100% secure — Inspect before payment
+                  </p>
+                </div>
+              </label>
+
+              <label
+                onClick={() => setValue("paymentMethod", "Online Payment")}
+                className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
+                  paymentMethod === "Online Payment"
+                    ? "border-[var(--color-accent)] bg-emerald-50/20 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <input
+                  type="radio"
+                  value="Online Payment"
+                  {...register("paymentMethod")}
+                  className="mt-1 accent-[var(--color-primary)] cursor-pointer"
+                />
+                <div className="space-y-1 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h4 className="text-xs font-bold">Online Payment (Bank Transfer / Easypaisa)</h4>
+                    <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0">
+                      5% OFF
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[var(--color-muted)]">
+                    Get instant 5% discount on paying via Bank Transfer or Easypaisa.
+                  </p>
+                </div>
+              </label>
+
+              {paymentMethod === "Online Payment" && (
+                <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 space-y-4 animate-fadeIn">
+                  {/* Bank Details */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 border-b border-amber-200/60 pb-1.5">
+                      <Building2 size={15} className="text-amber-800" />
+                      <span className="text-xs font-extrabold text-amber-900 uppercase tracking-wider">
+                        1. Bank Transfer (Habib Metro Bank)
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">Bank Name</p>
+                        <p className="font-bold text-gray-900">Habib Metro Bank</p>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">Account Title</p>
+                        <p className="font-bold text-gray-900">ABDUL REHMAN MIRZA</p>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">Account No.</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-gray-900 font-mono">6016 3203 1171 4167 932</p>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy("6016320311714167932", "acc")}
+                            className="text-gray-500 hover:text-black cursor-pointer"
+                          >
+                            {copiedField === "acc" ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">IBAN</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-gray-900 font-mono text-[11px]">PK84 MPBL 0163 0271 4016 7932</p>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy("PK84MPBL0163027140167932", "iban")}
+                            className="text-gray-500 hover:text-black cursor-pointer"
+                          >
+                            {copiedField === "iban" ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Easypaisa / Mobile Wallet Details */}
+                  <div className="space-y-2 pt-2 border-t border-amber-200/60">
+                    <div className="flex items-center gap-2 border-b border-amber-200/60 pb-1.5">
+                      <Smartphone size={15} className="text-emerald-700" />
+                      <span className="text-xs font-extrabold text-emerald-900 uppercase tracking-wider">
+                        2. Easypaisa Account
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">Account Title</p>
+                        <p className="font-bold text-gray-900">ABDUL REHMAN MIRZA</p>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase">Easypaisa Mobile No.</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-gray-900 font-mono">0331 38257220</p>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy("03238224745", "easy")}
+                            className="text-gray-500 hover:text-black cursor-pointer"
+                          >
+                            {copiedField === "easy" ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* WhatsApp Payment Proof Button */}
+                  <div className="pt-2 border-t border-amber-200/60">
+                    <p className="text-[10px] text-gray-600 mb-2">
+                      Transfer karne ke baad transaction screenshot WhatsApp par send kar dein:
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleSendPaymentProof}
+                      className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px] flex items-center justify-center gap-2 shadow-xs cursor-pointer transition-colors"
+                    >
+                      <WhatsAppIcon size={14} /> Send Payment Proof
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
+        {/* STEP 3: Order Summary */}
         <div className="lg:col-span-5">
-          <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 shadow-xs sticky top-6 space-y-5">
-            <h2 className="text-lg font-bold font-serif border-b border-[var(--color-border)] pb-3">
-              Order Summary
-            </h2>
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs sticky top-6 space-y-5">
+            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+              <h2 className="text-lg font-bold font-serif">Order Summary</h2>
+              <span className="text-[10px] font-bold text-[var(--color-muted)] tracking-widest uppercase">
+                STEP 3
+              </span>
+            </div>
             <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-medium flex items-center gap-1.5">
               <Sparkles size={14} className="text-emerald-600 shrink-0" />
               <span>Free delivery on orders over PKR 5,000</span>
             </div>
 
-            <div className="space-y-3 overflow-y-auto no-scrollbar pr-1">
+            <div className="space-y-3 overflow-y-auto no-scrollbar pr-1 max-h-[300px]">
               {isLoadingCart ? (
                 <p className="text-xs text-[var(--color-muted)] text-center py-4">
                   Loading items...
@@ -382,7 +527,7 @@ export default function Checkout() {
                     key={item.id}
                     className={`pb-3.5 flex items-center justify-between gap-3 ${
                       index !== checkoutItems.length - 1
-                        ? "border-b border-[var(--color-border)]"
+                        ? "border-b border-gray-100"
                         : ""
                     }`}
                   >
@@ -390,10 +535,10 @@ export default function Checkout() {
                       <img
                         src={item.img}
                         alt={item.name}
-                        className="w-14 h-14 rounded-xl object-cover bg-gray-100 border border-[var(--color-border)] shrink-0"
+                        className="w-14 h-14 rounded-xl object-cover bg-gray-100 border border-gray-200 shrink-0"
                       />
                       <div className="min-w-0">
-                        <h4 className="text-xs font-bold  text-[var(--color-text-dark)]">
+                        <h4 className="text-xs font-bold text-[var(--color-text-dark)]">
                           {item.name}
                         </h4>
                         <p className="text-xs font-extrabold text-[var(--color-accent)] mt-0.5">
@@ -401,7 +546,7 @@ export default function Checkout() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-card-bg)] shrink-0">
+                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-[var(--color-card-bg)] shrink-0">
                       <button
                         type="button"
                         onClick={() => updateQty(item.id, -1)}
@@ -424,7 +569,8 @@ export default function Checkout() {
                 ))
               )}
             </div>
-            <div className="border-t border-[var(--color-border)] pt-4 space-y-2.5 text-xs">
+
+            <div className="border-t border-gray-100 pt-4 space-y-2.5 text-xs">
               <div className="flex justify-between text-[var(--color-muted)]">
                 <span>Subtotal</span>
                 <span className="font-semibold text-[var(--color-text-dark)]">
@@ -441,7 +587,15 @@ export default function Checkout() {
                       : `PKR ${deliveryCharge}`}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-[var(--color-border)] pt-3 text-sm font-bold">
+
+              {onlineDiscount > 0 && (
+                <div className="flex justify-between text-emerald-600 font-semibold">
+                  <span>Online Payment Discount (5%)</span>
+                  <span>- PKR {onlineDiscount.toLocaleString()}</span>
+                </div>
+              )}
+
+              <div className="flex justify-between border-t border-gray-100 pt-3 text-sm font-bold">
                 <span>TOTAL</span>
                 <span className="text-[var(--color-accent)]">
                   PKR {totalAmount.toLocaleString()}

@@ -23,9 +23,9 @@ const MegaMenu = memo(({ category, currentSub }: { category: CategoryItem; curre
 
   return (
     <div className="absolute top-full left-0 right-0 w-full bg-[var(--color-primary)] border-t border-[var(--color-primary-hover)] shadow-2xl z-50 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible pointer-events-none group-hover:pointer-events-auto">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 min-h-[200px] flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 min-h-[100px] flex flex-col justify-center">
         <h4 className="text-xs font-bold text-[var(--color-accent)] uppercase tracking-widest mb-6">{category.categoryname}</h4>
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
+        <div className="flex flex-wrap items-center gap-x-10 ">
           {subs.map((sub, idx) => (
            <Link
             key={`${category._id}-${idx}`}

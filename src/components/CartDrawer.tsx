@@ -125,9 +125,6 @@ const handleQtyUpdate = async (item: any, delta: number) => {
         {cartItems.length > 0 && (
           <div className="pt-3 border-t border-[var(--color-border)] space-y-2.5 shrink-0">
             <div className="space-y-1 text-xs text-[var(--color-muted)] bg-[var(--color-card-bg)] p-2.5 rounded-xl border border-[var(--color-border)]">
-           <span className="flex w-full items-center justify-center text-center py-1.5 px-0.5 sm:px-2 sm:py-2 mb-2 rounded-lg border border-[var(--color-danger)]/40 bg-[var(--color-danger)]/10 text-[var(--color-danger)] font-extrabold text-xs sm:text-sm  shadow-[0_0_15px_rgba(220,38,38,0.15)]">
-             <span>Karachi delivery: PKR 300 | Other cities: PKR 600</span>
-             </span>
               <div className="flex justify-between"><span>Subtotal</span><span className="font-bold text-[var(--color-text-dark)]">PKR {cartTotalAmount.toLocaleString()}</span></div>
               <div className="flex justify-between items-center">
                 <span>Delivery</span>

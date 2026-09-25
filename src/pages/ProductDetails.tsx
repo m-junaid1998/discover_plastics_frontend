@@ -136,18 +136,6 @@ export default function ProductDetails() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 font-sans text-[var(--color-text-dark)]">
-      {/* Breadcrumb */}
-      <div className="mb-6">
-        <Breadcrumb
-          items={[
-            { label: "Home", link: "/" },
-            { label: "Shop", link: "/shop" },
-            categoryLabel && { label: categoryLabel, link: "/shop" },
-            { label: name },
-          ].filter(Boolean)}
-        />
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-16">
         {/* Left Side: Images */}
         <div className="md:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
@@ -253,7 +241,7 @@ export default function ProductDetails() {
           {/* Color Swatches Selection */}
           {colors.length > 0 && (
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">
+              <span className="text-base font-bold text-gray-500 uppercase tracking-wider shrink-0">
                 COLORS:
               </span>
               <div className="flex items-center gap-1.5">
@@ -272,7 +260,7 @@ export default function ProductDetails() {
                       }`}
                     >
                       <span
-                        className="block w-4 h-4 rounded-full border border-black/10"
+                        className="block w-5 h-5 rounded-full border border-black/10"
                         style={{ backgroundColor: getColorValue(clr) }}
                       />
                     </button>
@@ -284,7 +272,7 @@ export default function ProductDetails() {
 
           {/* Dimensions Display */}
           {hasDimensions && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
+            <div className="flex items-center gap-1.5 text-base text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
               <Ruler size={14} className="shrink-0 text-amber-700" />
               <span>
                 <strong className="text-gray-900 font-bold mr-0.5">Dimension:</strong>

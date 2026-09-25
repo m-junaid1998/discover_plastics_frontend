@@ -177,7 +177,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 )}
 
           {hasDimensions && (
-            <div className="flex items-center text-xs text-gray-700 font-semibold mb-2.5 bg-[#fbf6f0] px-2.5 py-1 rounded-lg w-fit border border-amber-100/60">
+            <div className="hidden md:flex items-center text-xs text-gray-700 font-semibold mb-2.5 bg-[#fbf6f0] px-2.5 py-1 rounded-lg w-fit border border-amber-100/60">
               <span>
                 <strong className="text-gray-900 font-bold mr-0.5">Dimension:</strong>
                 {dimensions?.length || 0}L x {dimensions?.width || 0}W x {dimensions?.height || 0}H cm
