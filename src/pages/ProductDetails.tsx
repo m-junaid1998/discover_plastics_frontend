@@ -2,12 +2,15 @@ import { useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Heart, ShoppingBag, ArrowRight, Ruler, Star } from "lucide-react";
 import { CustomerReviews } from "../components/CustomerReviews";
+
 import { WhatsAppIcon } from "../utils/socialicons";
 import { useWishlist } from "../hooks/useWishList";
 import { useCart } from "../hooks/useCart";
 import { useReview } from "../hooks/useReview";
+import { useGetQuery } from "../api/apiSlice";
+import { endpoints } from "../api/config";
+import { RelatedProducts } from "./RelatedProducts";
 
-// Helper function to convert color names / hex codes to CSS valid color strings
 const getColorValue = (colorStr: string): string => {
   if (!colorStr) return "#e5e7eb";
   const trimmed = colorStr.trim().toLowerCase();
@@ -53,6 +56,14 @@ export default function ProductDetails() {
     ratings: staticRatings = 0,
     numReviews: staticNumReviews = 0,
   } = product as any;
+
+  // Direct RTK Query call for Related Products (No useEffect required)
+  const { data: relatedRes, isLoading: isRelatedLoading } = useGetQuery(
+    { endpoint: endpoints.productRoutes.getRelated(_id) },
+    { skip: !_id }
+  );
+
+  const relatedProducts = relatedRes?.data?.data || relatedRes?.data || [];
 
   // Dynamic Reviews Syncing
   const { reviews = [], reviewsCount = 0 } = useReview(_id);
@@ -139,7 +150,7 @@ export default function ProductDetails() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 font-sans text-[var(--color-text-dark)]">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
         {/* Left Side: Images */}
         <div className="md:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
           {images.length > 1 && (
@@ -188,7 +199,6 @@ export default function ProductDetails() {
               </div>
             )}
 
-            {/* Main Image Slider */}
             <div
               ref={sliderRef}
               onScroll={handleScroll}
@@ -227,7 +237,6 @@ export default function ProductDetails() {
               {name}
             </h1>
 
-            {/* Dynamic Ratings & Reviews Count Display */}
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md">
                 <Star size={13} className="fill-amber-400 text-amber-500" />
@@ -241,7 +250,6 @@ export default function ProductDetails() {
             </div>
           </div>
 
-          {/* Color Swatches Selection */}
           {colors.length > 0 && (
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">
@@ -273,7 +281,6 @@ export default function ProductDetails() {
             </div>
           )}
 
-          {/* Dimensions Display */}
           {hasDimensions && (
             <div className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
               <Ruler size={14} className="shrink-0 text-amber-700" />
@@ -284,7 +291,6 @@ export default function ProductDetails() {
             </div>
           )}
 
-          {/* Price & Stock */}
           <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
             <div className="flex items-baseline gap-3">
               <span className="text-2xl md:text-3xl font-extrabold text-[var(--color-text-dark)]">
@@ -305,7 +311,6 @@ export default function ProductDetails() {
             </span>
           </div>
 
-          {/* Quantity Selector */}
           <div>
             <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-muted)] block mb-2">
               Quantity
@@ -331,7 +336,6 @@ export default function ProductDetails() {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col gap-3 pt-2">
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -365,20 +369,19 @@ export default function ProductDetails() {
             </button>
           </div>
 
-          {/* Product Description */}
           {description && (
             <div className="border-t border-[var(--color-border)] pt-3 mt-2">
-              <span className="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-dark)]">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--color-muted)] mb-2">
                 Description
-              </span>
-              <p className="text-xs text-[var(--color-muted)] leading-relaxed mt-2">
+              </h3>
+              <p className="text-sm text-[var(--color-text-dark)] leading-relaxed whitespace-pre-line">
                 {description}
               </p>
             </div>
           )}
         </div>
       </div>
-
+      <RelatedProducts products={relatedProducts} isLoading={isRelatedLoading} />
       <CustomerReviews productId={_id} />
     </div>
   );
