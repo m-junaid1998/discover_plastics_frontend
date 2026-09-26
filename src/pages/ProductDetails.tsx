@@ -218,7 +218,7 @@ export default function ProductDetails() {
         </div>
 
         {/* Right Side: Product Details */}
-        <div className="md:col-span-5 flex flex-col gap-5">
+        <div className="md:col-span-5 flex flex-col gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               {categoryLabel && (
@@ -282,10 +282,9 @@ export default function ProductDetails() {
           )}
 
           {hasDimensions && (
-            <div className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
-              <Ruler size={14} className="shrink-0 text-amber-700" />
+            <div className="flex items-center  text-base text-gray-700 font-semibold bg-[#fbf6f0] rounded-lg w-fit border border-amber-100/60">
               <span>
-                <strong className="text-gray-900 font-bold mr-1">Dimension:</strong>
+                <strong className="text-gray-600 font-bold">SIZE:</strong>
                 {dimensions?.length || 0}L x {dimensions?.width || 0}W x {dimensions?.height || 0}H cm
               </span>
             </div>
