@@ -145,7 +145,7 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
 
           {/* Items Log */}
           <div className="space-y-2">
-            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase tracking-wider">
+            <p className="text-[11px] font-extrabold text-[var(--color-text-dark)] opacity-90 uppercase tracking-wider">
               Items Log
             </p>
             <div className="divide-y divide-[var(--color-border)] border-t border-b border-[var(--color-border)]">
@@ -153,19 +153,19 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
                 const dim = item.dimensions;
                 const formattedDimensions = dim 
                   ? [
-                      dim.length !== undefined && dim.length > 0 ? `${dim.length}" L` : null,
-                      dim.width !== undefined && dim.width > 0 ? `${dim.width}" W` : null,
-                      dim.height !== undefined && dim.height > 0 ? `${dim.height}" H` : null,
+                      dim.length !== undefined && dim.length > 0 ? `${dim.length}L` : null,
+                      dim.width !== undefined && dim.width > 0 ? `${dim.width}W` : null,
+                      dim.height !== undefined && dim.height > 0 ? `${dim.height}H` : null,
                     ].filter(Boolean).join(" × ")
                   : "";
 
                 return (
-                  <div key={item.id} className="py-3 flex items-center gap-3">
+                  <div key={item.id} className="py-3 flex items-center gap-2">
                     {item.image && (
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-16 h-16 rounded-lg object-cover border border-[var(--color-border)] flex-shrink-0"
+                        className="w-24 h-24 sm:w-16 sm:h-16 rounded-lg object-cover border border-[var(--color-border)] flex-shrink-0"
                       />
                     )}
                     <div className="flex-1 min-w-0">
@@ -182,7 +182,7 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
                             </span>
                           )}
                           {formattedDimensions && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-dark)]">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-bold bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-dark)]">
                               Dim: {formattedDimensions}
                             </span>
                           )}
