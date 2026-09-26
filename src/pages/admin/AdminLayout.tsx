@@ -52,8 +52,8 @@ export default function AdminLayout() {
         <div>
           <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
             {isOpen && (
-              <h1 className="font-serif text-sm font-bold uppercase truncate">
-                Home N More <span className="text-[var(--color-accent)] italic font-normal">Studio</span>
+              <h1 className="text-sm  font-bold uppercase">
+                DISCOVER PLASTICS 
               </h1>
             )}
             <button 

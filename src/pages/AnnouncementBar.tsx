@@ -7,7 +7,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
 offers = [
     { text: "YOUR FAVORITE PRODUCTS, JUST A CLICK AWAY! 🛒", icon: <SparklesIcon />},
     {text: "DELIVERY ALL OVER PAKISTAN 🇵🇰", icon: <TruckIcon />},
-    { text: "Flat Delivery Charges: Rs. 300 across Karachi & Rs. 600 for all other cities in Pakistan!", icon: <TruckIcon /> },
+    { text: "Flat Delivery Charges: Rs. 300 across all  cities in Pakistan!", icon: <TruckIcon /> },
   ],
 }) => {
   const [isVisible, setIsVisible] = useState(true);
