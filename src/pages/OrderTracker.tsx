@@ -42,7 +42,7 @@ const OrderTracker = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-muted)]" />
             <input
               type="text"
-              placeholder="e.g. HMN-23852151"
+              placeholder="e.g. DSP-23852151"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[var(--color-border)] text-xs focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
@@ -131,10 +131,11 @@ const OrderTracker = () => {
                   {order.orderItems.map((item: any) => (
                     <div key={item._id} className="flex items-center justify-between p-3 text-xs">
                       <div className="flex items-center gap-3">
-                        <img src={item.image} alt={item.name} className="w-10 h-10 rounded-lg object-cover" />
+                        <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
                         <div>
                           <p className="font-bold text-[var(--color-text-dark)]">{item.name}</p>
-                          <p className="text-[11px] text-[var(--color-muted)]">Rs. {item.price} × {item.qty}</p>
+                          <p className="font-bold text-[var(--color-text-dark)]">Rs. {item.price} × {item.qty}</p>
+                          <p className="font-bold text-[var(--color-text-dark)]">{item.color}</p>
                         </div>
                       </div>
                       <span className="font-bold text-[var(--color-text-dark)]">Rs. {item.price * item.qty}</span>
