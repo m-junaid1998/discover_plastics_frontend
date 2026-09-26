@@ -33,7 +33,7 @@ export interface OrderItem {
   customerInfo?: {
     fullName?: string;
     phone?: string;
-    country?:string;
+    country?: string;
     city?: string;
     areaTown?: string;
     address?: string;
@@ -45,6 +45,12 @@ export interface OrderItem {
     price: number;
     image: string;
     product?: string;
+    color?: string;
+    dimensions?: {
+      length?: number;
+      width?: number;
+      height?: number;
+    };
   }[];
   totalPrice?: number;
   itemsPrice?: number;
@@ -86,12 +92,12 @@ const STATUS_MAP: Record<string | number, string> = {
 };
 
 const STYLES: Record<string, string> = {
-  Confirmed: "border-blue-500/30 text-blue-600 bg-blue-50/50",
-  Delivered: "border-emerald-500/30 text-emerald-600 bg-emerald-50/50",
+  Confirmed: "border-indigo-500/30 text-indigo-600 bg-indigo-50/50",
+  Delivered: "border-[var(--color-success)]/30 text-[var(--color-success)] bg-emerald-50/50",
   Pending: "border-amber-500/30 text-amber-600 bg-amber-50/50",
   Processing: "border-purple-500/30 text-purple-600 bg-purple-50/50",
-  Shipped: "border-indigo-500/30 text-indigo-600 bg-indigo-50/50",
-  Cancelled: "border-red-500/30 text-red-600 bg-red-50/50",
+  Shipped: "border-cyan-500/30 text-cyan-600 bg-cyan-50/50",
+  Cancelled: "border-[var(--color-danger)]/30 text-[var(--color-danger)] bg-red-50/50",
 };
 
 const AdminOrders = () => {
@@ -115,7 +121,7 @@ const AdminOrders = () => {
         handleSearch(val);
         setPage(1);
       }, 200),
-    [handleSearch, setPage],
+    [handleSearch, setPage]
   );
 
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +217,7 @@ const AdminOrders = () => {
         Icon: DollarSign,
       },
     ],
-    [dashboardStats],
+    [dashboardStats]
   );
 
   const columns: Column<OrderItem>[] = [
@@ -247,7 +253,7 @@ const AdminOrders = () => {
       header: "Total Spend",
       className: "whitespace-nowrap",
       render: (r) => (
-        <span className="font-bold">
+        <span className="font-bold text-[var(--color-text-dark)]">
           PKR {(r.totalPrice || 0).toLocaleString()}
         </span>
       ),
@@ -259,7 +265,7 @@ const AdminOrders = () => {
         return (
           <span
             className={`inline-flex px-3 py-1 rounded-full text-[10px] font-bold border ${
-              STYLES[statusStr] || "border-gray-200"
+              STYLES[statusStr] || "border-gray-200 text-gray-700 bg-gray-50"
             }`}
           >
             {statusStr}
@@ -308,12 +314,12 @@ const AdminOrders = () => {
       type: "ORDER",
       title: `Order ${order.orderNumber}`,
       subtitle: `Placed ${new Date(order.createdAt).toLocaleString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
       })}`,
       status: (STATUS_MAP[order.status] || order.status) as ItemStatus,
       statusOptions: STATUSES,
@@ -333,6 +339,8 @@ const AdminOrders = () => {
         qty: item.qty,
         unitPrice: item.price,
         image: item.image,
+        colors: item.color,
+        dimensions: item.dimensions,
       })),
       subtotal,
       shippingFee: shippingPrice === 0 ? "FREE" : shippingPrice,
@@ -366,6 +374,7 @@ const AdminOrders = () => {
           </div>
         ))}
       </div>
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-[var(--color-card-bg)] border border-[var(--color-border)] shadow-sm">
         <div>
           <h1 className="text-base font-bold tracking-wider text-[var(--color-text-dark)] uppercase">
@@ -383,7 +392,7 @@ const AdminOrders = () => {
               placeholder="Search..."
               value={state.searchInput}
               onChange={onSearchChange}
-              className="w-full h-10 pl-10 pr-4 text-xs bg-[var(--color-card-bg)] rounded-lg border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]"
+              className="w-full h-10 pl-10 pr-4 text-xs bg-[var(--color-card-bg)] rounded-lg border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)] text-[var(--color-text-dark)]"
             />
           </div>
           <FormSelect

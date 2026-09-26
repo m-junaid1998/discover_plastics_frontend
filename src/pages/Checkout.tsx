@@ -73,10 +73,14 @@ export default function Checkout() {
     qty: number;
     img: string;
     stock: number;
+    // Color selected on the product/cart level, falling back to the
+    // product's first available color if the user never picked one.
+    color: string | null;
   }
 
   const checkoutItems: CheckoutItem[] = liveCartItems.map((item: any) => {
     const p = item.product || {};
+    const productColors: string[] = p.colors || [];
     return {
       id: String(p._id ?? ""),
       name: p.name || "Product",
@@ -84,6 +88,7 @@ export default function Checkout() {
       qty: item.qty || 1,
       img: p.images?.[0] || "",
       stock: p.stock ?? Infinity,
+      color: item.color || productColors[0] || null,
     };
   });
 
@@ -151,6 +156,9 @@ export default function Checkout() {
           qty: item.qty,
           image: item.img,
           price: item.price,
+          // Always send a color: user's selection, or the product's first
+          // color as default when nothing was explicitly chosen.
+          color: item.color,
         })),
         itemsPrice: subtotal,
         shippingPrice: deliveryCharge,
@@ -193,9 +201,10 @@ export default function Checkout() {
       .map((item, idx) => {
         const itemLink = `${window.location.origin}/product/${createSlug(item.name)}`;
         const qtyWord = item.qty > 1 ? "items" : "item";
+        const colorLine = item.color ? `\nColor: ${item.color}` : "";
         return [
           `*${idx + 1}. ${item.name.toUpperCase()}*`,
-          `Quantity: ${item.qty} ${qtyWord}`,
+          `Quantity: ${item.qty} ${qtyWord}${colorLine}`,
           `Price: Rs. ${item.price.toLocaleString()} x ${item.qty} = *Rs. ${(item.price * item.qty).toLocaleString()}*`,
           `Link: ${itemLink}`,
         ].join("\n");
@@ -541,9 +550,16 @@ export default function Checkout() {
                         <h4 className="text-xs font-bold text-[var(--color-text-dark)]">
                           {item.name}
                         </h4>
-                        <p className="text-xs font-extrabold text-[var(--color-accent)] mt-0.5">
-                          PKR {item.price.toLocaleString()}
-                        </p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-xs font-extrabold text-[var(--color-accent)]">
+                            PKR {item.price.toLocaleString()}
+                          </p>
+                          {item.color && (
+                            <span className="text-[10px] font-medium text-[var(--color-muted)] capitalize bg-gray-100 px-1.5 py-0.5 rounded">
+                              {item.color}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-[var(--color-card-bg)] shrink-0">

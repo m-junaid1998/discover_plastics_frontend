@@ -3,14 +3,14 @@ import { X } from "lucide-react";
 import { FormSelect, type SelectOption } from "../../components/FormSelect";
 import { Button } from "../../components/Button";
 
-export type ItemStatus = 
-  | "Pending" 
-  | "In Progress" 
-  | "Resolved" 
-  | "Confirmed" 
-  | "Processing" 
-  | "Shipped" 
-  | "Delivered" 
+export type ItemStatus =
+  | "Pending"
+  | "In Progress"
+  | "Resolved"
+  | "Confirmed"
+  | "Processing"
+  | "Shipped"
+  | "Delivered"
   | "Cancelled";
 
 export interface OrderItemLog {
@@ -19,11 +19,17 @@ export interface OrderItemLog {
   qty: number;
   unitPrice: number;
   image?: string;
+  colors?: string;
+  dimensions?: {
+    length?: number;
+    width?: number;
+    height?: number;
+  };
 }
 
 export type ModalData =
   | {
-      id: string; 
+      id: string;
       type: "QUERY";
       title: string;
       subtitle: string;
@@ -36,7 +42,7 @@ export type ModalData =
       onSaveAction?: (formData: FormData) => Promise<void>;
     }
   | {
-      id: string; 
+      id: string;
       type: "ORDER";
       title: string;
       subtitle: string;
@@ -86,6 +92,8 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-sans">
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
         <div className="relative w-full max-w-lg max-h-[85dvh] overflow-y-auto no-scrollbar rounded-2xl bg-white border border-[var(--color-border)] p-6 shadow-xl z-10 space-y-5 text-[var(--color-text-dark)]">
+          
+          {/* Header */}
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-xl font-serif font-bold text-[var(--color-text-dark)]">{data.title}</h2>
@@ -100,16 +108,21 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
             </button>
           </div>
 
+          {/* Status Pipeline */}
           <div className="flex items-center justify-between gap-4 flex-wrap pb-2 border-b border-[var(--color-border)]">
             <div className="space-y-1">
-              <p className="text-[10px] font-extrabold tracking-wider text-[var(--color-text-dark)] opacity-70 uppercase">Current Status</p>
+              <p className="text-[10px] font-extrabold tracking-wider text-[var(--color-text-dark)] opacity-70 uppercase">
+                Current Status
+              </p>
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border ${statusStyle}`}>
                 <span className="w-1.5 h-1.5 rounded-full bg-current" />
                 {String(data.status).toUpperCase()}
               </span>
             </div>
             <div className="space-y-1 text-right">
-              <p className="text-[10px] font-extrabold tracking-wider text-[var(--color-text-dark)] opacity-70 uppercase">Update Pipeline</p>
+              <p className="text-[10px] font-extrabold tracking-wider text-[var(--color-text-dark)] opacity-70 uppercase">
+                Update Pipeline
+              </p>
               <FormSelect
                 options={data.statusOptions}
                 value={data.status}
@@ -119,38 +132,73 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
               />
             </div>
           </div>
+
+          {/* Delivery Details */}
           <div className="p-4 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-border)] space-y-1">
-            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase tracking-wider">Delivery Details</p>
+            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase tracking-wider">
+              Delivery Details
+            </p>
             <h3 className="text-sm font-bold text-[var(--color-text-dark)]">{data.customerName}</h3>
             <p className="text-xs font-semibold text-[var(--color-text-dark)]">Phone: {data.phone}</p>
             <p className="text-xs font-semibold text-[var(--color-text-dark)]">{data.address}</p>
           </div>
 
+          {/* Items Log */}
           <div className="space-y-2">
-            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase tracking-wider">Items Log</p>
+            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase tracking-wider">
+              Items Log
+            </p>
             <div className="divide-y divide-[var(--color-border)] border-t border-b border-[var(--color-border)]">
-              {data.items.map((item) => (
-                <div key={item.id} className="py-3 flex items-center gap-3">
-                  {item.image && (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-12 h-12 rounded-lg object-cover border border-[var(--color-border)] flex-shrink-0"
-                    />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-bold text-[var(--color-text-dark)] truncate">{item.title}</h4>
-                    <p className="text-[11px] font-semibold text-[var(--color-text-dark)] opacity-80 mt-0.5">
-                      Qty {item.qty} × PKR {item.unitPrice.toLocaleString()}
-                    </p>
+              {data.items.map((item) => {
+                const dim = item.dimensions;
+                const formattedDimensions = dim 
+                  ? [
+                      dim.length !== undefined && dim.length > 0 ? `${dim.length}" L` : null,
+                      dim.width !== undefined && dim.width > 0 ? `${dim.width}" W` : null,
+                      dim.height !== undefined && dim.height > 0 ? `${dim.height}" H` : null,
+                    ].filter(Boolean).join(" × ")
+                  : "";
+
+                return (
+                  <div key={item.id} className="py-3 flex items-center gap-3">
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-16 h-16 rounded-lg object-cover border border-[var(--color-border)] flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-bold text-[var(--color-text-dark)] truncate">{item.title}</h4>
+                      <p className="text-[11px] font-semibold text-[var(--color-text-dark)] opacity-80 mt-0.5">
+                        Qty {item.qty} × PKR {item.unitPrice.toLocaleString()}
+                      </p>
+
+                      {(item.colors || formattedDimensions) && (
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                          {item.colors && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[var(--color-text-dark)] border border-[var(--color-border)] text-white ">
+                              Color: {item.colors}
+                            </span>
+                          )}
+                          {formattedDimensions && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-dark)]">
+                              Dim: {formattedDimensions}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-sm font-bold text-[var(--color-text-dark)] flex-shrink-0">
+                      PKR {(item.qty * item.unitPrice).toLocaleString()}
+                    </span>
                   </div>
-                  <span className="text-sm font-bold text-[var(--color-text-dark)] flex-shrink-0">
-                    PKR {(item.qty * item.unitPrice).toLocaleString()}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
+
+          {/* Price Breakdown */}
           <div className="p-4 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-border)] space-y-2 text-xs">
             <div className="flex justify-between font-semibold text-[var(--color-text-dark)]">
               <span>Subtotal</span>
@@ -196,21 +244,29 @@ export const AdminDetailModal: React.FC<ModalProps> = ({ isOpen, onClose, data }
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         <form action={formAction} className="space-y-4">
           <div className="p-4 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-border)] space-y-1">
-            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase">Sender Profile</p>
+            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase">
+              Sender Profile
+            </p>
             <h3 className="text-sm font-bold text-[var(--color-text-dark)]">{data.senderName}</h3>
             <p className="text-xs text-[var(--color-accent-text)] font-bold">{data.senderEmail}</p>
           </div>
 
           <div className="p-4 rounded-xl bg-[var(--color-card-bg)] border border-[var(--color-border)] space-y-1">
-            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase">Client Message</p>
+            <p className="text-[10px] font-extrabold text-[var(--color-text-dark)] opacity-70 uppercase">
+              Client Message
+            </p>
             <p className="text-xs italic font-medium text-[var(--color-text-dark)]">"{data.clientMessage}"</p>
           </div>
 
           <div className="border-t border-[var(--color-border)] pt-2 flex items-center justify-between">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border ${STYLES[data.status] || "border-gray-200"}`}>
+            <span
+              className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border ${
+                STYLES[data.status] || "border-gray-200"
+              }`}
+            >
               {data.status}
             </span>
             <FormSelect

@@ -23,8 +23,13 @@ const getColorValue = (colorStr: string): string => {
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const navigate = useNavigate();
+
+  const prod = product as any;
+  const colors: string[] = prod.colors || [];
+
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  // even if the user never taps a swatch.
+  const [selectedColor, setSelectedColor] = useState<string | null>(colors[0] || null);
   const [previewImages, setPreviewImages] = useState(false);
 
   const { toggleWishlist, isInWishlist, isWishlistMutationLoading } = useWishlist();
@@ -35,7 +40,6 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const currentImg = selectedImg || product.images?.[0] || "";
   const productSlug = createSlug(product.name);
 
-  const prod = product as any;
   const categoryLabel = typeof product.categoryname === "object"
     ? product.categoryname?.categoryname
     : product.categoryname || "";
@@ -46,7 +50,6 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
   const dimensions = prod.dimensions;
   const hasDimensions = dimensions && (dimensions.length > 0 || dimensions.width > 0 || dimensions.height > 0);
-  const colors: string[] = prod.colors || [];
 
   const handleNavigate = () => navigate(`/product/${productSlug}`, { state: { product } });
 
@@ -72,14 +75,21 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!validateStock()) return;
-    addToCart(product._id, 1, false, { successMessage: `Added ${product.name} to Cart` });
+    addToCart(
+      product._id,
+      1,
+      false,
+      { successMessage: `Added ${product.name} to Cart` },
+      selectedColor || colors[0] || null
+    );
   };
 
   const handleBuyNow = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!validateStock()) return;
-    const res = await addToCart(product._id, 1, false);
-    if (res?.success) navigate("/checkout", { state: { directItem: { product, qty: 1 } } });
+    const chosenColor = selectedColor || colors[0] || null;
+    const res = await addToCart(product._id, 1, false, undefined, chosenColor);
+    if (res?.success) navigate("/checkout", { state: { directItem: { product, qty: 1, selectedColor: chosenColor } } });
   };
 
   return (

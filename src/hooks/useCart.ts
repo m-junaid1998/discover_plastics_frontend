@@ -26,9 +26,9 @@ export const useCart = (autoFetch = true) => {
     return res;
   };
 
-  const addToCart = (product: string, qty = 1, isDirectUpdate = false, options?: ApiHandlerOptions) =>
+  const addToCart = (product: string, qty = 1, isDirectUpdate = false, options?: ApiHandlerOptions , color?: string | null) =>
     mutateCart( endpoints.cartRoutes.base, "POST",
-      { product, qty, isDirectUpdate },
+      { product, qty, isDirectUpdate , color },
       { errorMessage: "Failed to update cart.", ...options }
     );
 

@@ -104,19 +104,23 @@ export default function ProductDetails() {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isOutOfStock)
-      addToCart(_id, qty, false, { successMessage: `Added ${name} to Cart` });
+    if (!isOutOfStock) {
+      addToCart(_id, qty, false, {
+        successMessage: `Added ${name} to Cart`,
+      }, selectedColor);
+    }
   };
 
   const handleBuyNow = async () => {
     if (isOutOfStock) return;
-    const res = await addToCart(_id, qty, false);
+    const res = await addToCart(_id, qty, false, undefined, selectedColor);
     if (res?.success) {
       navigate("/checkout", {
         state: {
           directItem: {
-            product: { _id, name, stock, salePrice, regularPrice, images },
+            product: { _id, name, stock, salePrice, regularPrice, images, selectedColor },
             qty,
+            selectedColor,
           },
         },
       });
@@ -129,7 +133,7 @@ export default function ProductDetails() {
     const message = `*PRODUCT INQUIRY / ORDER*\n\n*Product:* ${name}${colorText}\n*Quantity:* ${qty}\n*Price:* Rs. ${salePrice.toLocaleString()} x ${qty} = Rs. ${(salePrice * qty).toLocaleString()}\n*Product Link:* ${window.location.href}\n\nHi, I want to place an order for this item. Please share further details.`;
     window.open(
       `https://wa.me/923238224745?text=${encodeURIComponent(message)}`,
-      "_blank",
+      "_blank"
     );
   };
 
@@ -240,7 +244,7 @@ export default function ProductDetails() {
           {/* Color Swatches Selection */}
           {colors.length > 0 && (
             <div className="flex items-center gap-2">
-              <span className="text-base font-bold text-gray-500 uppercase tracking-wider shrink-0">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">
                 COLORS:
               </span>
               <div className="flex items-center gap-1.5">
@@ -254,7 +258,7 @@ export default function ProductDetails() {
                       onClick={() => setSelectedColor(clr)}
                       className={`p-[2px] rounded-full transition-all cursor-pointer border ${
                         isSelected
-                          ? "border-black scale-110 shadow-xs"
+                          ? "border-black scale-110 shadow-xs ring-2 ring-black/20"
                           : "border-gray-200 hover:border-gray-400"
                       }`}
                     >
@@ -271,10 +275,10 @@ export default function ProductDetails() {
 
           {/* Dimensions Display */}
           {hasDimensions && (
-            <div className="flex items-center gap-1.5 text-base text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
+            <div className="flex items-center gap-1.5 text-xs text-gray-700 font-semibold bg-[#fbf6f0] px-2.5 py-1.5 rounded-lg w-fit border border-amber-100/60">
               <Ruler size={14} className="shrink-0 text-amber-700" />
               <span>
-                <strong className="text-gray-900 font-bold mr-0.5">Dimension:</strong>
+                <strong className="text-gray-900 font-bold mr-1">Dimension:</strong>
                 {dimensions?.length || 0}L x {dimensions?.width || 0}W x {dimensions?.height || 0}H cm
               </span>
             </div>

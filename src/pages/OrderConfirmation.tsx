@@ -1,6 +1,21 @@
 import { useLocation, Navigate, useNavigate } from "react-router-dom";
-import { Truck, User, Phone, MapPin, PackageCheck, Banknote } from "lucide-react";
+import { Truck, User, Phone, MapPin, PackageCheck, Banknote, Ruler } from "lucide-react";
 import { Breadcrumb } from "../components/Breadcrumb";
+
+// Helper function to convert color names / hex codes to CSS valid color strings
+const getColorValue = (colorStr: string): string => {
+  if (!colorStr) return "#e5e7eb";
+  const trimmed = colorStr.trim().toLowerCase();
+  if (trimmed.startsWith("#") || trimmed.startsWith("rgb") || trimmed.startsWith("hsl")) return trimmed;
+
+  const colorsMap: Record<string, string> = {
+    white: "#ffffff", black: "#000000", red: "#dc2626", blue: "#2563eb",
+    green: "#15803d", yellow: "#eab308", brown: "#6b7280", pink: "#fbcfe8",
+    purple: "#9333ea", orange: "#ea580c", gray: "#6b7280", grey: "#6b7280",
+    gold: "#d97706", silver: "#d1d5db", beige: "#fef3c7", cream: "#fffdd0",
+  };
+  return colorsMap[trimmed] || trimmed;
+};
 
 const OrderConfirmation = () => {
   const location = useLocation();
@@ -135,32 +150,61 @@ const OrderConfirmation = () => {
               Order Summary
             </h2>
 
-            <div className="space-y-3 max-h-56 overflow-y-auto no-scrollbar divide-y divide-[var(--color-border)]">
-              {order.orderItems?.map((item: any, idx: number) => (
-                <div
-                  key={item._id || idx}
-                  className="pt-3 first:pt-0 flex items-center justify-between gap-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-12 h-12 rounded-lg object-cover bg-white border border-[var(--color-border)]"
-                    />
-                    <div>
-                      <h4 className="text-xs font-bold truncate max-w-[180px] sm:max-w-[220px]">
-                        {item.name}
-                      </h4>
-                      <p className="text-[11px] text-[var(--color-muted)]">
-                        Qty: {item.qty}
-                      </p>
+            <div className="space-y-3 max-h-64 overflow-y-auto no-scrollbar divide-y divide-[var(--color-border)]">
+              {order.orderItems?.map((item: any, idx: number) => {
+                const itemColor = item.color || item.selectedColor;
+                const dim = item.dimensions;
+                const hasDimensions =
+                  dim && (dim.length > 0 || dim.width > 0 || dim.height > 0);
+
+                return (
+                  <div
+                    key={item._id || idx}
+                    className="pt-3 first:pt-0 flex items-start justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={item.image || item.images?.[0]}
+                        alt={item.name}
+                        className="w-12 h-12 rounded-lg object-cover bg-white border border-[var(--color-border)] shrink-0"
+                      />
+                      <div className="space-y-0.5">
+                        <h4 className="text-xs font-bold truncate max-w-[160px] sm:max-w-[200px]">
+                          {item.name}
+                        </h4>
+
+                        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[var(--color-muted)]">
+                          <span>Qty: {item.qty}</span>
+
+                          {/* Selected Color */}
+                          {itemColor && (
+                            <span className="flex items-center gap-1 bg-gray-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-[10px] font-medium text-gray-700 dark:text-gray-300">
+                              <span
+                                className="w-2.5 h-2.5 rounded-full border border-black/20"
+                                style={{ backgroundColor: getColorValue(itemColor) }}
+                              />
+                              <span className="capitalize">{itemColor}</span>
+                            </span>
+                          )}
+
+                          {/* Dimensions */}
+                          {hasDimensions && (
+                            <span className="flex items-center gap-1 text-[10px] bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 rounded border border-amber-200/50">
+                              <Ruler size={10} className="shrink-0" />
+                              <span>
+                                {dim.length || 0}L x {dim.width || 0}W x {dim.height || 0}H cm
+                              </span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
+                    <span className="text-xs font-bold font-sans shrink-0">
+                      PKR {(item.price * item.qty)?.toLocaleString()}
+                    </span>
                   </div>
-                  <span className="text-xs font-bold font-sans">
-                    PKR {(item.price * item.qty)?.toLocaleString()}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
