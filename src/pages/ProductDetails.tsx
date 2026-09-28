@@ -255,7 +255,7 @@ export default function ProductDetails() {
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">
                 COLORS:
               </span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 {colors.map((clr: string, i: number) => {
                   const isSelected = selectedColor === clr;
                   return (
