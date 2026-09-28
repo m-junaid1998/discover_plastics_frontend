@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Main Colors (Rich Deep Maroon & Soft Cream Beige Core) */
-  --color-primary: #581825;          /* Deep Elegant Maroon / Wine (Primary buttons, hero CTA, headers) */
-  --color-primary-hover: #3D0F19;    /* Darker Maroon for button hover states */
-  --color-bg-light: #FAF6EF;         /* Soft Creamy Beige background (Light & clean, not dark) */
-  --color-text-dark: #1C1214;        /* Rich Dark Espresso/Near-Black for crisp readability */
+  /* Main Core (Rich Deep Maroon & Soft Cream Beige) */
+  --color-primary: #581825;          /* Deep Elegant Maroon / Wine */
+  --color-primary-hover: #3D0F19;    /* Darker Maroon for button hovers */
+  --color-bg-light: #FAF6EF;         /* Soft Creamy Beige background (Light & clean) */
+  --color-text-dark: #1C1214;        /* Dark Espresso for crisp readability */
 
-  /* Soft Rose-Beige & Metallic Maroon Accents */
-  --color-accent: #E2C2C6;           /* Soft Dusty Rose Accent (Hero shapes, badges, highlight bars) */
-  --color-accent-hover: #D5ADB2;      /* Slightly deeper Rose-Beige for hover */
-  --color-accent-text: #581825;      /* High contrast Maroon text for light elements */
-  --color-badge: #42111A;            /* Deep Maroon for badge text on light backgrounds */
+  /* Gold & Warm Bronze Complementary Accents (Replaced Pink) */
+  --color-accent: #CFA365;           /* Warm Metallic Gold (Hero shapes, highlight bars, CTA accent) */
+  --color-accent-hover: #B58A4E;      /* Deeper Gold for hover states */
+  --color-accent-text: #581825;      /* High-contrast Maroon text on gold/light elements */
+  --color-badge: #42111A;            /* Deep Maroon for badge text */
 
-  /* Helper & Card Neutral Colors */
-  --color-border: #EADBCE;           /* Light Cream-Beige for subtle borders & dividers */
-  --color-muted: #5C5254;            /* Soft Muted Maroon-Gray for secondary text & metadata */
-  --color-card-bg: #F3ECE1;          /* Light Creamy Beige for cards, containers & input backgrounds */
+  /* Neutral Helpers & Secondary Contrast Tones */
+  --color-border: #E5D5C3;           /* Soft Warm Beige for subtle borders & dividers */
+  --color-muted: #615053;            /* Warm Muted Maroon-Gray for secondary text & metadata */
+  --color-card-bg: #F2E8DB;          /* Smooth Warm Cream for cards, inputs & containers */
 
   /* UI Feedback & Status Colors */
   --color-danger: #D92626;           /* Crimson Red (Error state) */
   --color-success: #166534;          /* Emerald Green for success alerts */
   --color-blue: #1D4ED8;
 
-  /* Reusable Discount Badge Colors */
-  --color-discount-bg: #802334;      /* Medium Maroon for Discount Badge */
-  --color-discount-text: #FFFFFF;    /* Crisp White text on discount badge */
+  /* Reusable Discount & Highlight Badge Colors */
+  --color-discount-bg: #802334;      /* Deep Wine Maroon for Discount Badge */
+  --color-discount-text: #FFFFFF;    /* Pure White text */
 }
 
 @keyframes marquee {
