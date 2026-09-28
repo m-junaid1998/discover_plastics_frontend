@@ -145,7 +145,7 @@ export const AdminProducts: React.FC = () => {
           <h1 className="text-2xl font-extrabold tracking-wider uppercase text-text-dark">PRODUCT MANAGEMENT</h1>
           <p className="text-sm text-muted">Total inventory items: <span className="font-bold text-accent">{pagination?.totalCount || 0}</span></p>
         </div>
-        <button onClick={() => openFormModal()} className="bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase px-6 py-3.5 rounded-xl flex items-center gap-2 cursor-pointer">
+        <button onClick={() => openFormModal()} className="bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase px-4 py-4 rounded-xl flex items-center gap-2 cursor-pointer">
           <Plus className="w-4 h-4 text-accent" /> Add Product
         </button>
       </div>
