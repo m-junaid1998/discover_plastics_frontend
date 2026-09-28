@@ -10,14 +10,12 @@ export const PageLoader: React.FC = () => (
     </div>
     <div className="relative z-10 flex flex-col items-center">
       <div className="p-4 rounded-2xl bg-white/5 border border-[var(--color-accent)]/30 backdrop-blur-md shadow-2xl flex items-center justify-center mb-6">
-        <img  src={logo}  alt="Brand Logo"  className="h-16 md:h-20 w-auto object-contain"/>
+        <img src={logo} alt="Brand Logo" className="h-16 md:h-20 w-auto object-contain"/>
       </div>
       <div className="w-12 h-[1px] bg-[var(--color-accent)]/40 mb-6" />
       <div className="flex items-center space-x-2.5">
         {[0, 0.2, 0.4].map((delay, i) => (
-          <span
-            key={i}
-            className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)] animate-pulse [animation-duration:1.2s]"
+          <span key={i} className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)] animate-pulse [animation-duration:1.2s]"
             style={{ animationDelay: `${delay}s` }}
           />
         ))}
