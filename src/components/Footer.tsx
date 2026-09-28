@@ -20,9 +20,9 @@ const LINKS = [
 ];
 
 const SOCIALS = [
-  { icon: <InstagramIcon />, href: "https://instagram.com/home_n_more_studio/", label: "Instagram" },
-  { icon: <FacebookIcon />, href: "https://facebook.com/homenmorestudio", label: "Facebook" },
-  { icon: <PhoneIcon />, href: "tel:+923238224745", label: "Phone" },
+  { icon: <InstagramIcon />, href: "https://www.instagram.com/discoverplastic", label: "Instagram" },
+  { icon: <FacebookIcon />, href: "https://www.facebook.com/creationplasticofficial", label: "Facebook" },
+  { icon: <PhoneIcon />, href: "tel:+923138257220", label: "Phone" },
   { icon: <MapPinIcon />, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`, label: "Location" },
 ];
 

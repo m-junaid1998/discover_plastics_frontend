@@ -16,7 +16,7 @@ const schema = z.object({
 type ContactFormData = z.infer<typeof schema>;
 
 const INFO = [
-  { icon: <Mail size={22} />, title: 'Email', content: <a href="mailto:homenmorestudio26@gmail.com" className="text-[var(--color-text-dark)] font-medium text-sm hover:text-[var(--color-accent)]">homenmorestudio26@gmail.com</a> },
+  { icon: <Mail size={22} />, title: 'Email', content: <a href="mailto:discoverplastics@gmail.com" className="text-[var(--color-text-dark)] font-medium text-sm hover:text-[var(--color-accent)]">discoverplastics@gmail.com</a> },
   { icon: <Phone size={22} />, title: 'Phone / WhatsApp', content: <><a href="tel:+923238224745" className="text-[var(--color-text-dark)] font-semibold text-sm mb-2">03238224745</a><a href="https://wa.me/923238224745" target="_blank" rel="noreferrer" className="inline-flex items-center space-x-1.5 text-xs text-[var(--color-primary)] font-medium hover:underline"><WhatsAppIcon size={16} /><span>Chat on WhatsApp</span></a></> },
   { icon: <MapPin size={22} />, title: 'Location', content: <p className="text-[var(--color-muted)] text-sm max-w-[220px] leading-relaxed"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("HOME N’ MORE STUDIO TOWN, SHOP NO G - 213 AQ SUPER MARKET BAHRIA TOWN KARACHI BAHRIA, KARACHI, Karachi, 75300, Pakistan")}`}target="_blank" rel="noopener noreferrer">
     HOME N’ MORE STUDIO TOWN, SHOP NO G - 213 AQ SUPER MARKET BAHRIA TOWN KARACHI BAHRIA, KARACHI, Karachi, 75300, Pakistan</a></p> }];
