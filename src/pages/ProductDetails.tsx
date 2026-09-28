@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Heart, ShoppingBag, ArrowRight, Ruler, Star } from "lucide-react";
+import { Heart, ShoppingBag, ArrowRight, Star } from "lucide-react";
 import { CustomerReviews } from "../components/CustomerReviews";
 
 import { WhatsAppIcon } from "../utils/socialicons";
