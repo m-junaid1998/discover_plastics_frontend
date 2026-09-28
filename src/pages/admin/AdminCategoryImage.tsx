@@ -145,7 +145,7 @@ const AdminCategoryImage = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {categoryImages.map((img: any) => (
             <div
               key={img._id}
@@ -173,7 +173,7 @@ const AdminCategoryImage = () => {
                 </div>
               </div>
               <div className="p-4 bg-white border-t border-[var(--color-border)] flex items-center justify-between">
-                <h3 className="font-serif font-bold text-sm text-[var(--color-text-dark)] truncate">
+                <h3 className="font-bold text-sm text-[var(--color-text-dark)] truncate">
                   {img.categoryName}
                 </h3>
                 {img.subCategoryName ? (
