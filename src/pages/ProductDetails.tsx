@@ -152,7 +152,7 @@ export default function ProductDetails() {
     <div className="max-w-7xl mx-auto px-4 py-6 font-sans text-[var(--color-text-dark)]">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
         {/* Left Side: Images */}
-        <div className="md:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
+        <div className="md:col-span-6 flex flex-col-reverse sm:flex-row gap-4">
           {images.length > 1 && (
             <div className="flex sm:flex-col gap-3 overflow-auto max-h-[480px] shrink-0 no-scrollbar p-1">
               {images.map((img: string, i: number) => (
@@ -218,7 +218,7 @@ export default function ProductDetails() {
         </div>
 
         {/* Right Side: Product Details */}
-        <div className="md:col-span-5 flex flex-col gap-4">
+        <div className="md:col-span-6 flex flex-col gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               {categoryLabel && (
