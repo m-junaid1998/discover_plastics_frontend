@@ -2,6 +2,7 @@ import { Fragment, lazy } from "react";
 import { CategorySection } from "./CategorySection";
 import { CategoryGridSection } from "./CategoryGridSection";
 import {Hero} from "./Hero";
+import FAQ from "./FAQ";
 import ReelsSection from "./ReelsSection";
 const TopRated = lazy(() => import("./TopRated"));
 const BestSelling = lazy(() => import("./BestSelling"));
@@ -21,6 +22,7 @@ const Home = () => {
       <CategoryGridSection />
       <NewArrivals />
       <Testimonials />
+      <FAQ/>
     </Fragment>
   );
 };
