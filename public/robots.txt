@@ -16,4 +16,4 @@ Disallow: /signup
 Disallow: /admin
 
 # Sitemap
-Sitemap: https://homenmorestudio.com/sitemap.xml
+Sitemap: https://discoverplastics.com/sitemap.xml

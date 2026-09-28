@@ -10,6 +10,7 @@ const Shop = lazy(() => import("../pages/Shop"));
 const ProductDetails = lazy(() => import("../pages/ProductDetails"));
 const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
 const ShippingPolicy = lazy(() => import("../pages/ShippingPolicy"));
+const FAQ = lazy(() => import("../pages/FAQ"));
 const MyProfile = lazy(() => import("../pages/MyProfile"));
 const Checkout = lazy(() => import("../pages/Checkout"));
 const OrderConfirmation = lazy(() => import("../pages/OrderConfirmation"));
@@ -41,6 +42,7 @@ export const publicRoutes = [
   { path: "product/:slug", element: <ProductDetails /> },
   { path: "privacy", element: <PrivacyPolicy /> },
   { path: "shipping-policy", element: <ShippingPolicy /> },
+  { path: "faq", element: <FAQ /> },
   { path: "myprofile", element: <MyProfile /> },
   { path: "order-confirmation", element: <OrderConfirmation /> },
   { path: "track-order", element: <OrderTracker /> },

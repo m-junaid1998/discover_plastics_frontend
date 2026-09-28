@@ -233,7 +233,7 @@ export default function ProductDetails() {
               )}
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-text-dark)] leading-snug mb-2">
+            <h1 className="text-2xl md:text-3xl font-[system-ui] font-bold text-[var(--color-text-dark)] leading-snug mb-2">
               {name}
             </h1>
 
@@ -251,8 +251,8 @@ export default function ProductDetails() {
           </div>
 
           {colors.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider shrink-0">
+            <div className="flex items-center gap-4">
+              <span className="text-base font-bold text-gray-500 uppercase tracking-wider shrink-0">
                 COLORS:
               </span>
               <div className="flex items-center gap-6">

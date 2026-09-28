@@ -16,6 +16,7 @@ const LINKS = [
   { name: "Contact", path: "/contact" },
   { name: "Privacy Policy", path: "/privacy" },
   { name: "Shipping Information", path: "/shipping-policy" },
+  { name: "FAQ", path: "/faq" },
 ];
 
 const SOCIALS = [
