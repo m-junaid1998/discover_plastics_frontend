@@ -39,11 +39,11 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[var(--color-bg-light)] text-[var(--color-text-dark)] border-t border-[var(--color-border)]">
+    <footer className="bg-[var(--color-bg-light)] text-[var(--color-primary)] border-t border-[var(--color-border)]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10">
           <div className="lg:col-span-4 pr-0 lg:pr-6">
-            <h2 className="text-4xl font-[system-ui] font-bold mb-2">Discover Plastics</h2>
+            <h2 className="text-4xl font-[system-ui] font-bold mb-2 text-">Discover Plastics</h2>
             <p className="text-[var(--color-muted)] font-[system-ui] text-sm mb-5">Brings gorgeous luxury products to your home!</p>
             <div className="flex items-center space-x-2">
               {SOCIALS.map((s, i) => (
