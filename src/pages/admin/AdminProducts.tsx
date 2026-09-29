@@ -14,7 +14,7 @@ const schema = z.object({
   name: z.string().min(1, "Name required"),
   categoryname: z.string().min(1, "Category required"),
   subCategory: z.string().optional().default(""),
-  stock: z.coerce.number().min(0),
+  stock: z.coerce.number().min(0, "Stock cannot be negative"),
   regularPrice: z.coerce.number().min(0),
   salePrice: z.coerce.number().min(0),
   description: z.string().min(1, "Description required"),
@@ -244,7 +244,7 @@ export const AdminProducts: React.FC = () => {
                 <div><label className={labelStyle}>Regular Price</label><input type="number" className={inputStyle} {...register("regularPrice")} /></div>
                 <div><label className={labelStyle}>Sale Price</label><input type="number" className={inputStyle} {...register("salePrice")} /></div>
                 <div><label className={labelStyle}>Discount</label><div className={`${inputStyle} flex items-center justify-center font-bold text-accent`}>{discount}</div></div>
-                <div><label className={labelStyle}>Stock</label><input type="number" className={inputStyle} {...register("stock")} /></div>
+                <div><label className={labelStyle}>Stock</label><input type="number"  min={0} className={inputStyle} {...register("stock")}  /></div>
               </div>
 
               <div>
