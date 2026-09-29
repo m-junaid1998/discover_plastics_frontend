@@ -23,7 +23,7 @@ export default function WhatsAppButton() {
 
   return (
     <div style={pos ? { position: "fixed", left: `${pos.x}px`, top: `${pos.y}px`, zIndex: 99999, touchAction: "none" } : { position: "fixed", bottom: "20px", right: "20px", zIndex: 99999, touchAction: "none" }} onMouseDown={startDrag} onTouchStart={startDrag}>
-      <a href="https://wa.me/923238224745?text=Hi%20Home%20N%20More%20Studio%2C%20I%20have%20an%20inquiry%20regarding%20a%20product%20or%20order." target="_blank" rel="noopener noreferrer" onClick={(e) => dragged && e.preventDefault()}>
+      <a  href="https://wa.me/923138257220?text=Hi%20Discover%20Plastics%2C%20I%20have%20an%20inquiry%20regarding%20a%20product%20or%20order." target="_blank" rel="noopener noreferrer" onClick={(e) => dragged && e.preventDefault()}>
         <img src={WhatAppIcon} alt="WhatsApp" className="w-12 h-12 md:w-14 md:h-14 select-none pointer-events-none " />
       </a>
     </div>

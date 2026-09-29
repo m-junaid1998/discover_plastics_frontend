@@ -202,19 +202,18 @@ export const Navbar: React.FC = () => {
 
   {/* Drawer Footer */}
   <div className="px-6 pb-6 pt-4 space-y-4 border-t border-[var(--color-border)] shrink-0 bg-[var(--color-bg-light)]">
-    <a href="tel:+923238224745" className="w-full bg-[var(--color-primary)] text-white py-3 rounded-full flex items-center justify-center space-x-2 font-bold text-xs uppercase hover:bg-[var(--color-primary-hover)] transition-colors">
+    <a href="tel:+923138257220" className="w-full bg-[var(--color-primary)] text-white py-3 rounded-full flex items-center justify-center space-x-2 font-bold text-xs uppercase hover:bg-[var(--color-primary-hover)] transition-colors">
       <Phone size={15} /><span>Call Us Now</span>
     </a>
     <div className="flex items-start space-x-2 text-[11px] text-[var(--color-muted)]">
       <MapPin size={16} className="shrink-0 mt-0.5" />
       <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
-        HOME N’ MORE STUDIO TOWN, KARACHI
+        DISCOVER PLASTICS
       </a>
     </div>
   </div>
 </aside>
-
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-    </>
+<CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+</>
   );
 };

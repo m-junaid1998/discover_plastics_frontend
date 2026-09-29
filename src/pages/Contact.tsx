@@ -17,9 +17,9 @@ type ContactFormData = z.infer<typeof schema>;
 
 const INFO = [
   { icon: <Mail size={22} />, title: 'Email', content: <a href="mailto:discoverplastics@gmail.com" className="text-[var(--color-text-dark)] font-medium text-sm hover:text-[var(--color-accent)]">discoverplastics@gmail.com</a> },
-  { icon: <Phone size={22} />, title: 'Phone / WhatsApp', content: <><a href="tel:+923238224745" className="text-[var(--color-text-dark)] font-semibold text-sm mb-2">03238224745</a><a href="https://wa.me/923238224745" target="_blank" rel="noreferrer" className="inline-flex items-center space-x-1.5 text-xs text-[var(--color-primary)] font-medium hover:underline"><WhatsAppIcon size={16} /><span>Chat on WhatsApp</span></a></> },
-  { icon: <MapPin size={22} />, title: 'Location', content: <p className="text-[var(--color-muted)] text-sm max-w-[220px] leading-relaxed"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("HOME N’ MORE STUDIO TOWN, SHOP NO G - 213 AQ SUPER MARKET BAHRIA TOWN KARACHI BAHRIA, KARACHI, Karachi, 75300, Pakistan")}`}target="_blank" rel="noopener noreferrer">
-    HOME N’ MORE STUDIO TOWN, SHOP NO G - 213 AQ SUPER MARKET BAHRIA TOWN KARACHI BAHRIA, KARACHI, Karachi, 75300, Pakistan</a></p> }];
+  { icon: <Phone size={22} />, title: 'Phone / WhatsApp', content: <><a href="tel:+923138257220" className="text-[var(--color-text-dark)] font-semibold text-sm mb-2">03238224745</a><a href="https://wa.me/923238224745" target="_blank" rel="noreferrer" className="inline-flex items-center space-x-1.5 text-xs text-[var(--color-primary)] font-medium hover:underline"><WhatsAppIcon size={16} /><span>Chat on WhatsApp</span></a></> },
+  { icon: <MapPin size={22} />, title: 'Location', content: <p className="text-[var(--color-muted)] text-sm max-w-[220px] leading-relaxed"><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("north Karachi industrial area c-I 26 , Karachi, Pakistan")}`}target="_blank" rel="noopener noreferrer">
+    North Karachi industrial area c-I 26 , Karachi, Pakistan</a></p> }];
 
 const FEATS = [
   { title: 'Luxury Aesthetics', desc: 'Curated home decor & signature fragrances' },
@@ -61,7 +61,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           <div className="lg:col-span-5 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 md:p-8 flex flex-col justify-between">
             <div>
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[var(--color-text-dark)] mb-1">Send Us a Message</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--color-text-dark)] mb-1">Send Us a Message</h2>
               <p className="text-xs text-[var(--color-muted)] mb-6">Fill out the form below and we'll respond within 24 hours.</p>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -98,7 +98,7 @@ const Contact = () => {
 
           <div className="lg:col-span-7 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-8 md:p-12 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 rounded-2xl bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center mb-6"><Store size={32} /></div>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-[var(--color-text-dark)] mb-8">Why Shop with Home N More Studio?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-text-dark)] mb-8">Why Shop with Discover Plastics?</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 text-left w-full max-w-lg">
               {FEATS.map((f, i) => (
