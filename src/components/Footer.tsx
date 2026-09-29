@@ -43,8 +43,8 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10">
           <div className="lg:col-span-4 pr-0 lg:pr-6">
-            <h2 className="text-2xl font-bold mb-2">Discover Plastics</h2>
-            <p className="text-[var(--color-muted)] text-sm mb-5">Brings gorgeous luxury products to your home!</p>
+            <h2 className="text-4xl font-[system-ui] font-bold mb-2">Discover Plastics</h2>
+            <p className="text-[var(--color-muted)] font-[system-ui] text-sm mb-5">Brings gorgeous luxury products to your home!</p>
             <div className="flex items-center space-x-2">
               {SOCIALS.map((s, i) => (
                 <a key={i} href={s.href} aria-label={s.label} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white text-[var(--color-primary)] flex items-center justify-center hover:bg-[var(--color-accent)] hover:text-white transition-all shadow-xs">
@@ -55,14 +55,14 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="lg:col-span-2">
-            <h3 className="font-serif text-base font-bold mb-4">Quick Links</h3>
+            <h3 className="font-[system-ui] text-base font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               {LINKS.map((l, i) => <li key={i}><Link to={l.path} className="text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors">{l.name}</Link></li>)}
             </ul>
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="font-serif text-base font-bold mb-4">Categories</h3>
+            <h3 className="font-[system-ui] text-base font-bold mb-4">Categories</h3>
             {isLoadingCategories ? (
               <div className="space-y-2 animate-pulse">{[1, 2, 3, 4].map((n) => <div key={n} className="h-3.5 w-24 bg-gray-200 rounded" />)}</div>
             ) : (
@@ -75,8 +75,8 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="font-serif text-base font-bold mb-2">Newsletter</h3>
-            <p className="text-xs text-[var(--color-muted)] mb-4">Subscribe for new arrivals & exclusive offers.</p>
+            <h3 className="font-[system-ui] text-base font-bold mb-2">Newsletter</h3>
+            <p className="text-xs font-[system-ui] text-[var(--color-muted)] mb-4">Subscribe for new arrivals & exclusive offers.</p>
             <form onSubmit={handleSubscribe} className="space-y-3">
               <FormInput type="text" placeholder="Enter your email" value={email} onChange={(e) => setForm({ email: e.target.value, error: "" })} leftIcon={<Mail size={16} />} error={error} disabled={isNewsletterLoading} />
               <button type="submit" disabled={isNewsletterLoading} className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white text-xs font-semibold uppercase tracking-wider py-2.5 rounded-lg transition-colors shadow-xs cursor-pointer disabled:opacity-50">
