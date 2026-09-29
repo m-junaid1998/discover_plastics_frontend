@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Heart, ShoppingBag, ArrowRight, Star } from "lucide-react";
 import { CustomerReviews } from "../components/CustomerReviews";
-
 import { WhatsAppIcon } from "../utils/socialicons";
 import { useWishlist } from "../hooks/useWishList";
 import { useCart } from "../hooks/useCart";
@@ -11,25 +10,23 @@ import { useGetQuery } from "../api/apiSlice";
 import { endpoints } from "../api/config";
 import { RelatedProducts } from "./RelatedProducts";
 
-const getColorValue = (colorStr: string): string => {
-  if (!colorStr) return "#e5e7eb";
-  const trimmed = colorStr.trim().toLowerCase();
-  if (trimmed.startsWith("#") || trimmed.startsWith("rgb") || trimmed.startsWith("hsl")) return trimmed;
+const getColorBackground = (color: string | { name: string; hex?: string }): string => {
+  if (!color) return "#e5e7eb";
+  if (typeof color === "string") return color.trim();
+  if (color.hex && color.hex !== "#000000") return color.hex;
+  return color.name ? color.name.toLowerCase() : "#e5e7eb";
+};
 
-  const colorsMap: Record<string, string> = {
-    white: "#ffffff", black: "#000000", red: "#dc2626", blue: "#2563eb",
-    green: "#15803d", yellow: "#eab308", brown: "#6b7280", pink: "#fbcfe8",
-    purple: "#9333ea", orange: "#ea580c", gray: "#6b7280", grey: "#6b7280",
-    gold: "#d97706", silver: "#d1d5db", beige: "#fef3c7", cream: "#fffdd0",
-  };
-  return colorsMap[trimmed] || trimmed;
+const getColorName = (color: string | { name: string; hex?: string }): string => {
+  if (!color) return "";
+  if (typeof color === "string") return color;
+  return color.name || "";
 };
 
 export default function ProductDetails() {
   useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-
   const product = location.state?.product;
 
   if (!product) {
@@ -57,15 +54,12 @@ export default function ProductDetails() {
     numReviews: staticNumReviews = 0,
   } = product as any;
 
-  // Direct RTK Query call for Related Products (No useEffect required)
   const { data: relatedRes, isLoading: isRelatedLoading } = useGetQuery(
     { endpoint: endpoints.productRoutes.getRelated(_id) },
     { skip: !_id }
   );
 
   const relatedProducts = relatedRes?.data?.data || relatedRes?.data || [];
-
-  // Dynamic Reviews Syncing
   const { reviews = [], reviewsCount = 0 } = useReview(_id);
 
   const dynamicReviewsCount = reviewsCount || staticNumReviews;
@@ -74,7 +68,9 @@ export default function ProductDetails() {
     : Number(staticRatings).toFixed(1);
 
   const [selectedImgIndex, setSelectedImgIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string | null>(colors[0] || null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    colors[0] ? getColorName(colors[0]) : null
+  );
   const [qty, setQty] = useState(1);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +99,17 @@ export default function ProductDetails() {
     if (width > 0) {
       const newIdx = Math.round(e.currentTarget.scrollLeft / width);
       setSelectedImgIndex(newIdx);
+    }
+  };
+
+  // Color click logic: Switch color + corresponding image index
+  const handleColorChange = (colorObj: any, index: number) => {
+    const name = getColorName(colorObj);
+    setSelectedColor(name);
+    
+    // Agar image list mein index available hai toh index match karo
+    if (images.length > index) {
+      handleSelectImage(index);
     }
   };
 
@@ -255,15 +262,18 @@ export default function ProductDetails() {
               <span className="text-base font-bold text-gray-500 uppercase tracking-wider shrink-0">
                 COLORS:
               </span>
-              <div className="flex items-center gap-6">
-                {colors.map((clr: string, i: number) => {
-                  const isSelected = selectedColor === clr;
+              <div className="flex items-center gap-3 flex-wrap">
+                {colors.map((clr: any, i: number) => {
+                  const colorName = getColorName(clr);
+                  const isSelected = selectedColor === colorName;
+                  const bgStyle = getColorBackground(clr);
+
                   return (
                     <button
                       key={i}
                       type="button"
-                      title={clr}
-                      onClick={() => setSelectedColor(clr)}
+                      title={colorName}
+                      onClick={() => handleColorChange(clr, i)}
                       className={`p-[2px] rounded-full transition-all cursor-pointer border ${
                         isSelected
                           ? "border-black scale-110 shadow-xs ring-2 ring-black/20"
@@ -271,8 +281,8 @@ export default function ProductDetails() {
                       }`}
                     >
                       <span
-                        className="block w-5 h-5 rounded-full border border-black/10"
-                        style={{ backgroundColor: getColorValue(clr) }}
+                        className="block w-5 h-5 rounded-full border border-black/10 shrink-0"
+                        style={{ backgroundColor: bgStyle }}
                       />
                     </button>
                   );
@@ -282,9 +292,9 @@ export default function ProductDetails() {
           )}
 
           {hasDimensions && (
-            <div className="flex items-center  text-base text-gray-700 font-semibold bg-[#fbf6f0] rounded-lg w-fit border border-amber-100/60">
+            <div className="flex items-center text-base text-gray-700 font-semibold bg-[#fbf6f0] rounded-lg w-fit border border-amber-100/60 px-3 py-1.5">
               <span>
-                <strong className="text-gray-600 font-bold">SIZE:</strong>
+                <strong className="text-gray-600 font-bold mr-1">SIZE:</strong>
                 {dimensions?.length || 0}L x {dimensions?.width || 0}W x {dimensions?.height || 0}H cm
               </span>
             </div>

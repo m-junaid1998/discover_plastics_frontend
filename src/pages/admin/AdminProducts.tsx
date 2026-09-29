@@ -40,8 +40,6 @@ export const AdminProducts: React.FC = () => {
   const { params, setPage, handleSearch } = usePaginationParams({ pageSize: 4 });
   const { products, pagination, createProduct, updateProduct, deleteProduct, togglePublishStatus, isProductMutationLoading } = useProduct(params);
   const { categories } = useCategory({ isAllRecord: true });
-
-  // Unified State to prevent multi-render overhead
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     editingProduct: any;
@@ -84,7 +82,7 @@ export const AdminProducts: React.FC = () => {
     } : DEFAULT_FORM_VALUES);
 
     const formattedColors = Array.isArray(product?.colors) 
-      ? product.colors.map((c: any) => typeof c === "string" ? { name: c, hex: "#000000" } : c)
+      ? product.colors.map((c: any) => typeof c === "string" ? { name: c, hex: "" } : c)
       : [];
 
     setModalState(prev => ({
@@ -190,8 +188,8 @@ export const AdminProducts: React.FC = () => {
       {pagination?.totalPages > 1 && <div className="flex justify-center"><Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} onPageChange={setPage} /></div>}
 
       {modalState.isOpen && (
-        <div className="fixed inset-0 z-50 bg-primary/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-bg-light border border-border rounded-xl w-full max-w-lg max-h-[85vh] no-scrollbar  overflow-y-auto p-6 space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-muted/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-bg-light border border-border rounded-xl w-full max-w-lg max-h-[85vh] no-scrollbar overflow-y-auto p-6 space-y-4 shadow-2xl">
             <div className="flex justify-between items-center border-b border-border pb-2">
               <h2 className="font-bold text-xl">{modalState.editingProduct ? "Edit Product" : "Add Product"}</h2>
               <button onClick={closeFormModal} className="cursor-pointer"><X size={18} /></button>
@@ -264,7 +262,10 @@ export const AdminProducts: React.FC = () => {
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {modalState.selectedColors.map((color, idx) => (
                     <span key={idx} className="bg-primary/10 text-primary border border-primary/20 text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-full border border-border" style={{ backgroundColor: color.hex }} />
+                      <span 
+                        className="w-3 h-3 rounded-full border border-border shrink-0" 
+                        style={{ backgroundColor: color.hex && color.hex !== "#000000" ? color.hex : color.name.toLowerCase() }} 
+                      />
                       {color.name}
                       <X size={12} className="cursor-pointer hover:text-red-500 ml-1" onClick={() => setModalState(p => ({ ...p, selectedColors: p.selectedColors.filter((_, i) => i !== idx) }))} />
                     </span>

@@ -6,15 +6,9 @@ import type { PaginationParams } from "./Pagination/usePaginationParams";
 export const useProduct = (params?: PaginationParams) => {
   const [crudMutation, { isLoading: isCrudLoading }] = useCrudMutation();
   const [uploadMutation, { isLoading: isUploadLoading }] = useUploadMutation();
-  const [triggerGetProducts, { isLoading: isProductLazyLoading }] = useLazyGetQuery();
-  
-  const [triggerGetProductById] = useLazyGetQuery();
-  const [triggerGetTopRated] = useLazyGetQuery();
-  const [triggerGetBestSellers] = useLazyGetQuery();
-  const [triggerGetRelated] = useLazyGetQuery();
+  const [triggerLazyQuery, { isLoading: isProductLazyLoading }] = useLazyGetQuery();
 
   const { handleApiCall } = useApiHandler();
-
   const isProductMutationLoading = isCrudLoading || isUploadLoading;
 
   const queryResult = useGetQuery(
@@ -40,6 +34,12 @@ export const useProduct = (params?: PaginationParams) => {
     return res;
   };
 
+  const fetchLazy = (endpoint: string, queryParams?: any, errorMessage = "Failed to fetch data.", options?: ApiHandlerOptions) =>
+    handleApiCall(
+      triggerLazyQuery({ endpoint, params: queryParams }).unwrap(),
+      { errorMessage, ...options }
+    );
+
   return {
     productsQuery: queryResult,
     products: queryResult.data?.data || [],
@@ -50,47 +50,19 @@ export const useProduct = (params?: PaginationParams) => {
     isProductLazyLoading,
 
     getProducts: (customParams?: PaginationParams, options?: ApiHandlerOptions) =>
-      handleApiCall(
-        triggerGetProducts({
-          endpoint: endpoints.productRoutes.getAll,
-          params: customParams || params,
-        }).unwrap(),
-        { errorMessage: "Failed to fetch products.", ...options }
-      ),
+      fetchLazy(endpoints.productRoutes.getAll, customParams || params, "Failed to fetch products.", options),
 
     getProductById: (id: string | number, options?: ApiHandlerOptions) =>
-      handleApiCall(
-        triggerGetProductById({
-          endpoint: endpoints.productRoutes.getById(id),
-        }).unwrap(),
-        { errorMessage: "Failed to fetch product details.", ...options }
-      ),
+      fetchLazy(endpoints.productRoutes.getById(id), undefined, "Failed to fetch product details.", options),
 
-    getTopRatedProducts: (limit: number = 10, options?: ApiHandlerOptions) =>
-      handleApiCall(
-        triggerGetTopRated({
-          endpoint: endpoints.productRoutes.getTopRated,
-          params: { limit },
-        }).unwrap(),
-        { errorMessage: "Failed to fetch top rated products.", ...options }
-      ),
+    getTopRatedProducts: (limit = 10, options?: ApiHandlerOptions) =>
+      fetchLazy(endpoints.productRoutes.getTopRated, { limit }, "Failed to fetch top rated products.", options),
 
-    getBestSellerProducts: (limit: number = 10, options?: ApiHandlerOptions) =>
-      handleApiCall(
-        triggerGetBestSellers({
-          endpoint: endpoints.productRoutes.getBestSellers,
-          params: { limit },
-        }).unwrap(),
-        { errorMessage: "Failed to fetch best sellers.", ...options }
-      ),
+    getBestSellerProducts: (limit = 10, options?: ApiHandlerOptions) =>
+      fetchLazy(endpoints.productRoutes.getBestSellers, { limit }, "Failed to fetch best sellers.", options),
 
     getRelatedProducts: (id: string | number, options?: ApiHandlerOptions) =>
-      handleApiCall(
-        triggerGetRelated({
-          endpoint: endpoints.productRoutes.getRelated(id),
-        }).unwrap(),
-        { errorMessage: "Failed to fetch related products.", ...options }
-      ),
+      fetchLazy(endpoints.productRoutes.getRelated(id), undefined, "Failed to fetch related products.", options),
 
     createProduct: (data: FormData | Record<string, any>, options?: ApiHandlerOptions) =>
       exec(endpoints.productRoutes.create, "POST", data, true, {
@@ -120,13 +92,11 @@ export const useProduct = (params?: PaginationParams) => {
         ...options,
       }),
 
-    togglePublishStatus: (id: string | number | (string | number)[], options?: ApiHandlerOptions) => {
-      const targetIds = Array.isArray(id) ? id : [id];
-      return exec(endpoints.productRoutes.patch, "PATCH", { id: targetIds }, false, {
+    togglePublishStatus: (id: string | number | (string | number)[], options?: ApiHandlerOptions) =>
+      exec(endpoints.productRoutes.patch, "PATCH", { id: Array.isArray(id) ? id : [id] }, false, {
         successMessage: options?.successMessage || "Publish status updated.",
         errorMessage: "Failed to update status.",
         ...options,
-      });
-    },
+      }),
   };
 };

@@ -7,29 +7,29 @@ import { useCart } from "../hooks/useCart";
 import { toast } from "../utils/toast";
 import type { Product } from "../utils/types";
 
-const getColorValue = (colorStr: string): string => {
-  if (!colorStr) return "#e5e7eb";
-  const trimmed = colorStr.trim().toLowerCase();
-  if (trimmed.startsWith("#") || trimmed.startsWith("rgb") || trimmed.startsWith("hsl")) return trimmed;
+const getColorBackground = (color: string | { name: string; hex?: string }): string => {
+  if (!color) return "#e5e7eb";
+  if (typeof color === "string") return color.trim();
+  if (color.hex && color.hex !== "#000000") return color.hex;
+  return color.name ? color.name.toLowerCase() : "#e5e7eb";
+};
 
-  const colorsMap: Record<string, string> = {
-    white: "#ffffff", black: "#000000", red: "#dc2626", blue: "#2563eb",
-    green: "#15803d", yellow: "#eab308", brown: "#6b7280", pink: "#fbcfe8",
-    purple: "#9333ea", orange: "#ea580c", gray: "#6b7280", grey: "#6b7280",
-    gold: "#d97706", silver: "#d1d5db", beige: "#fef3c7", cream: "#fffdd0",
-  };
-  return colorsMap[trimmed] || trimmed;
+const getColorName = (color: string | { name: string; hex?: string }): string => {
+  if (!color) return "";
+  if (typeof color === "string") return color;
+  return color.name || "";
 };
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const navigate = useNavigate();
-
   const prod = product as any;
-  const colors: string[] = prod.colors || [];
+  const colors = prod.colors || [];
+  const images = product.images || [];
 
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
-  // even if the user never taps a swatch.
-  const [selectedColor, setSelectedColor] = useState<string | null>(colors[0] || null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    colors[0] ? getColorName(colors[0]) : null
+  );
   const [previewImages, setPreviewImages] = useState(false);
 
   const { toggleWishlist, isInWishlist, isWishlistMutationLoading } = useWishlist();
@@ -37,15 +37,15 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
   const isWishlisted = isInWishlist(product._id);
   const isOutOfStock = product.stock <= 0;
-  const currentImg = selectedImg || product.images?.[0] || "";
+  const currentImg = selectedImg || images[0] || "";
   const productSlug = createSlug(product.name);
 
   const categoryLabel = typeof product.categoryname === "object"
     ? product.categoryname?.categoryname
     : product.categoryname || "";
 
-  const displayCategory = product.subCategory && product.subCategory !== "None" 
-    ? product.subCategory 
+  const displayCategory = product.subCategory && product.subCategory !== "None"
+    ? product.subCategory
     : categoryLabel;
 
   const dimensions = prod.dimensions;
@@ -72,24 +72,28 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     return true;
   };
 
+  const handleColorSelect = (e: React.MouseEvent, clr: any, index: number) => {
+    e.stopPropagation();
+    const cName = getColorName(clr);
+    setSelectedColor(cName);
+    if (images.length > index) {
+      setSelectedImg(images[index]);
+    }
+  };
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!validateStock()) return;
-    addToCart(
-      product._id,
-      1,
-      false,
-      { successMessage: `Added ${product.name} to Cart` },
-      selectedColor || colors[0] || null
-    );
+    addToCart(product._id, 1, false, { successMessage: `Added ${product.name} to Cart` }, selectedColor);
   };
 
   const handleBuyNow = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!validateStock()) return;
-    const chosenColor = selectedColor || colors[0] || null;
-    const res = await addToCart(product._id, 1, false, undefined, chosenColor);
-    if (res?.success) navigate("/checkout", { state: { directItem: { product, qty: 1, selectedColor: chosenColor } } });
+    const res = await addToCart(product._id, 1, false, undefined, selectedColor);
+    if (res?.success) {
+      navigate("/checkout", { state: { directItem: { product, qty: 1, selectedColor } } });
+    }
   };
 
   return (
@@ -131,9 +135,9 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
 
-        {previewImages && product.images?.length > 1 && (
+        {previewImages && images.length > 1 && (
           <div className="absolute bottom-2 left-2 z-10 flex gap-1 p-1 bg-white/80 backdrop-blur-md rounded-lg shadow-sm border border-[var(--color-border)]">
-            {product.images.slice(0, 4).map((img, idx) => (
+            {images.slice(0, 4).map((img, idx) => (
               <button key={idx} type="button" onClick={(e) => { e.stopPropagation(); setSelectedImg(img); }}
                 className={`w-6 h-8 rounded overflow-hidden transition-all cursor-pointer ${currentImg === img ? "ring-2 ring-[var(--color-primary)] scale-105" : "opacity-60 hover:opacity-100"}`}>
                 <img src={img} alt="" className="w-full h-full object-cover" />
@@ -156,35 +160,31 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             {product.name}
           </p>
 
-     {colors.length > 0 && (
-      <div className="flex flex-wrap items-center gap-2 mb-2">
-      {colors.map((clr, i) => {
-        const isSelected = selectedColor === clr;
-        return (
-          <button
-            key={i}
-            type="button"
-            title={clr}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedColor(clr);
-            }}
-            className={`p-[2px] rounded-full transition-all cursor-pointer border ${
-              isSelected
-                ? "border-black scale-110 shadow-xs"
-                : "border-gray-200 hover:border-gray-400"
-            }`}
-          >
-            <span
-              className="block w-4 h-4 rounded-full border border-black/10"
-              style={{ backgroundColor: getColorValue(clr) }}
-            />
-          </button>
-        );
-      })}
-    </div>
- 
-)}
+          {colors.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              {colors.map((clr: any, i: number) => {
+                const colorName = getColorName(clr);
+                const isSelected = selectedColor === colorName;
+                const bgStyle = getColorBackground(clr);
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    title={colorName}
+                    onClick={(e) => handleColorSelect(e, clr, i)}
+                    className={`p-[2px] rounded-full transition-all cursor-pointer border ${
+                      isSelected ? "border-black scale-110 shadow-xs" : "border-gray-200 hover:border-gray-400"
+                    }`}
+                  >
+                    <span
+                      className="block w-4 h-4 rounded-full border border-black/10 shrink-0"
+                      style={{ backgroundColor: bgStyle }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {hasDimensions && (
             <div className="hidden md:flex items-center text-xs text-gray-700 font-semibold mb-2.5 bg-[#fbf6f0] px-2.5 py-1 rounded-lg w-fit border border-amber-100/60">
@@ -207,12 +207,12 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             )}
           </div>
 
-          {/* Stock & Preview Toggle (Justify Between on all screen sizes) */}
+          {/* Stock & Preview Toggle */}
           <div className="flex items-center justify-between gap-2 mb-3 w-full">
             <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${isOutOfStock ? "text-[var(--color-danger)] bg-red-50" : "text-[var(--color-success)] bg-emerald-50"}`}>
               Stock: {product.stock}
             </span>
-            {product.images?.length > 1 && (
+            {images.length > 1 && (
               <button type="button" onClick={() => setPreviewImages(!previewImages)} className="cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text-dark)] transition-colors p-1">
                 {previewImages ? <Eye size={16} /> : <EyeClosed size={16} />}
               </button>
@@ -220,7 +220,6 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col gap-1.5 w-full pt-1">
           <button type="button" disabled={isCartMutationLoading} onClick={handleAddToCart}
             className="w-full py-2.5 px-3 bg-[var(--color-card-bg)] hover:bg-[var(--color-border)] text-[var(--color-text-dark)] border border-[var(--color-border)] rounded-xl font-extrabold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50">
